@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_MCP_TOKEN}"
+      }
+    },
+    "svelte": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sveltejs/mcp"
+      ],
+      "env": {},
+      "description": "Official Svelte MCP server for code quality checks, documentation, and playground links",
+      "useFor": [
+        "Checking .svelte component quality (autofixer) - run before every commit",
+        "Svelte 4 and SvelteKit documentation lookup",
+        "Generating Svelte Playground links for demos",
+        "Verifying Svelte best practices and accessibility",
+        "Component quality assurance workflow"
+      ],
+      "commands": [
+        "mcp__svelte__svelte-autofixer - Check and fix component issues",
+        "mcp__svelte__list-sections - Browse Svelte documentation",
+        "mcp__svelte__get-documentation - Fetch specific docs",
+        "mcp__svelte__playground-link - Generate playground demo"
+      ]
+    },
+    "vitest-runner": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@madrus/vitest-mcp-server@latest"
+      ],
+      "env": {
+        "VITEST_PROJECT_DIR": "/Users/kramnat/projects/yamlManager"
+      },
+      "description": "Vitest MCP server for running tests and getting test results",
+      "useFor": [
+        "Running Vitest tests",
+        "Getting test coverage reports",
+        "Checking test status",
+        "Debugging test failures"
+      ]
+    }
+  }
+}
