@@ -1,0 +1,62 @@
+{
+  "name": "pagesage",
+  "version": "0.1.0",
+  "description": "Ancient Text OCR & Annotation Platform for digitizing Sanskrit, Hindi, and English multi-language books",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "validate": "npm run lint && npm run check && npm run test && npm run build",
+    "verify-setup": "node scripts/verify-setup.js"
+  },
+  "dependencies": {
+    "@sveltejs/kit": "^2.0.0",
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vitest/coverage-v8": "^1.1.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^2.35.1",
+    "prettier": "^3.1.1",
+    "prettier-plugin-svelte": "^3.1.2",
+    "svelte-check": "^3.6.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/pagesageapp.git"
+  },
+  "keywords": [
+    "ocr",
+    "annotation",
+    "sanskrit",
+    "hindi",
+    "sveltekit",
+    "document-ai",
+    "historical-texts"
+  ],
+  "author": "kramnat",
+  "license": "MIT",
+  "private": true
+}
