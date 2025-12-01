@@ -1,17 +1,17 @@
-# PageSage v2 Requirements - Multi-User Collaboration
+# PageSage v4 Requirements - Multi-User Collaboration
 
-**Version**: 2.0 (Multi-User)
+**Version**: 4.0 (Multi-User)
 **Status**: Planning
 **Depends On**: v1.0 complete
-**Target**: 6-12 months after v1.0 launch
+**Target**: After v1, v2, and v3 complete
 
-**GitHub Tracking**: See [Milestone: v2.0](https://github.com/your-repo/pagesageapp/milestone/2) and [Project Board](https://github.com/orgs/your-org/projects/1)
+**GitHub Tracking**: See [Milestone: v4](https://github.com/ramnathk/pagesageapp/milestone/4)
 
 ---
 
 ## Version Theme
 
-**v2.0: Enable Collaborative Book Digitization**
+**v4.0: Enable Collaborative Book Digitization**
 
 Transform PageSage from a solo tool into a collaborative platform where multiple editors can work together on digitizing ancient texts.
 
@@ -27,7 +27,7 @@ Transform PageSage from a solo tool into a collaborative platform where multiple
 
 ## Core Value Additions
 
-What v2 adds beyond v1:
+What v4 adds beyond v1:
 
 1. **Multi-User Authentication**: GitHub OAuth for all users
 2. **Role-Based Permissions**: Admin, Editor, Reviewer, Viewer roles
@@ -38,21 +38,22 @@ What v2 adds beyond v1:
 
 ---
 
-## Out of Scope for v2
+## Out of Scope for v4
 
-Deferred to v3 or later:
+Deferred to later versions:
 - ❌ Advanced analytics and reporting
 - ❌ Automated OCR quality improvements
 - ❌ Cross-book search and concordance
-- ❌ Public website integration (Component 2)
 - ❌ Bulk import from external OCR tools
 - ❌ Custom OCR model training
+
+**Note**: Public website (v2) and multiple books management (v3) should be completed before or alongside v4.
 
 ---
 
 ## Feature Dependencies
 
-**Critical**: Each v2 feature has dependencies that MUST be tracked
+**Critical**: Each v4 feature has dependencies that MUST be tracked
 
 ### Dependency Map
 
@@ -67,7 +68,7 @@ v1.0 Features (Prerequisites):
 └── Repository Structure
     └── Required by: Multi-user workflows, audit logging
 
-v2.0 Features (Build Order):
+v4.0 Features (Build Order):
 ├── User Authentication (#10)
 │   ├── Depends on: v1.0 complete
 │   └── Blocks: #11, #12, #13, #14, #15, #16, #17, #18
@@ -104,7 +105,7 @@ v2.0 Features (Build Order):
 
 **Dependencies**:
 - Requires: v1.0 deployment complete
-- Impacts: All v2 features (creates first admin account)
+- Impacts: All v4 features (creates first admin account)
 
 **Preconditions:**
 - Admin has GitHub account
@@ -143,7 +144,7 @@ v2.0 Features (Build Order):
 
 **Dependencies**:
 - Requires: Admin self-setup (#10) complete
-- Impacts: All v2 features (provides users to system)
+- Impacts: All v4 features (provides users to system)
 
 PageSage supports two methods for adding users: manual creation and invitation-based.
 
@@ -467,7 +468,7 @@ PageSage supports two methods for adding users: manual creation and invitation-b
 2. **Permission check**: System verifies user has project creation permission
 3. User enters project metadata (same as v1)
 4. System creates project (same as v1)
-5. **NEW in v2**: User can invite collaborators during creation
+5. **NEW in v4**: User can invite collaborators during creation
 6. User redirected to Project Dashboard
 
 **Differences from v1**:
@@ -691,7 +692,7 @@ PageSage supports two methods for adding users: manual creation and invitation-b
 ## Implementation Priority
 
 ### Phase 1: Foundation (Build First)
-Must complete before other v2 features:
+Must complete before other v4 features:
 
 1. **User Authentication** (#10) - Blocks everything else
 2. **Role-Based Permissions** (#11) - Blocks most features
@@ -716,7 +717,7 @@ Must complete before other v2 features:
 
 ---
 
-## Success Metrics (v2)
+## Success Metrics (v4)
 
 **Collaboration**:
 - Support 5 concurrent users without conflicts
@@ -749,7 +750,7 @@ What might come in v3:
 
 ## Notes
 
-- v2 builds on v1's version tracking foundation
+- v4 builds on v1's version tracking foundation
 - Dependencies are critical - don't skip tracking them
-- Many v2 features can be incrementally added (not big-bang release)
+- Many v4 features can be incrementally added (not big-bang release)
 - Some features (cost spike alerts, per-project budgets) could move to v1.1

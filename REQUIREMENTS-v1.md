@@ -29,15 +29,22 @@ A personal tool for digitizing ancient texts (Sanskrit, Hindi, and English multi
 
 **Explicitly OUT OF SCOPE for v1**:
 - ❌ Multiple users or collaboration
-- ❌ User authentication (just you)
-- ❌ Role-based permissions
-- ❌ Concurrent editing
-- ❌ User management
-- ❌ Per-user budgets or quotas
+- ❌ Role-based permissions (multi-user)
+- ❌ Concurrent editing (multi-user)
+- ❌ User management (multi-user provisioning)
+- ❌ Per-user budgets or quotas (multi-user)
 - ❌ Public website (Component 2)
 - ❌ Cross-reference engine (Component 3)
 
-**v2 Will Add**: Multi-user collaboration, roles, permissions (see REQUIREMENTS-v2.md)
+**IN SCOPE for v1**:
+- ✅ **Single-user authentication** (GitHub OAuth for admin)
+- ✅ Secure session management
+- ✅ Prevent unauthorized access
+
+**Future Versions Will Add**:
+- v2: Public website for book display (with Wikipedia-style change history)
+- v3: Multiple books/projects management
+- v4: Multi-user collaboration, roles, permissions (see REQUIREMENTS-v4.md)
 
 ---
 
@@ -81,7 +88,61 @@ Every edit is tracked with full attribution:
 
 ## Core User Flows (v1)
 
-### 1. Project Setup
+### 1. User Authentication & Authorization
+
+**Actors**: You (admin user)
+
+**Flow**:
+1. Navigate to PageSage application URL
+2. **If not authenticated**: Redirected to login page
+3. Click "Sign in with GitHub"
+4. GitHub OAuth flow:
+   - Redirected to GitHub authorization page
+   - Grant PageSage access to your GitHub account
+   - Redirected back to PageSage
+5. System validates OAuth response
+6. **First-time setup** (only on first login):
+   - System creates admin user profile
+   - Links GitHub username to admin account
+   - Stores session token (httpOnly cookie)
+7. **Subsequent logins**:
+   - System validates existing admin user
+   - Creates new session
+8. Redirected to Dashboard
+
+**Requirements**:
+- GitHub OAuth only (no password authentication)
+- Server-side session management
+- httpOnly, secure cookies (prevent XSS)
+- 7-day session timeout (auto-logout)
+- CSRF protection enabled
+- **Authorization check on every request**:
+  - API routes verify authenticated session
+  - Unauthenticated requests → 401 Unauthorized
+  - Frontend redirects to login if session expired
+- **Single admin user for v1**:
+  - First GitHub user to log in becomes admin
+  - System blocks additional users (until v4)
+  - Clear error message: "This is a single-user tool"
+
+**Security Requirements**:
+- OAuth state parameter (prevent CSRF)
+- Validate GitHub callback signatures
+- Store minimal user data (GitHub ID, username, avatar)
+- No plaintext passwords (OAuth only)
+- Automatic session refresh before expiry
+- Clear session on logout
+- Rate limiting on authentication endpoints
+
+**Error Handling**:
+- OAuth cancelled: Show message, allow retry
+- OAuth fails: Log error, show friendly message
+- Session expired: Auto-redirect to login
+- Concurrent sessions: Allow (same user, multiple tabs)
+
+---
+
+### 2. Project Setup
 
 **Actors**: You (sole user)
 
@@ -106,7 +167,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 2. Automated Image Processing
+### 3. Automated Image Processing
 
 **Actors**: System (background process)
 
@@ -129,7 +190,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 3. AI Layout Detection
+### 4. AI Layout Detection
 
 **Actors**: System (cloud API)
 
@@ -169,7 +230,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 4. Interactive Annotation Editor
+### 5. Interactive Annotation Editor
 
 **Actors**: You (editor)
 
@@ -212,7 +273,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 5. Version Tracking & History
+### 6. Version Tracking & History
 
 **Actors**: System (automatic), You (can review)
 
@@ -258,7 +319,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 6. OCR Text Extraction
+### 7. OCR Text Extraction
 
 **Actors**: You (initiate), System (execute)
 
@@ -291,7 +352,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 7. OCR Text Correction
+### 8. OCR Text Correction
 
 **Actors**: You (reviewer/corrector)
 
@@ -328,7 +389,7 @@ Every edit is tracked with full attribution:
 
 ---
 
-### 8. Export to Structured Markdown
+### 9. Export to Structured Markdown
 
 **Actors**: You (initiate), System (generate)
 
@@ -390,7 +451,7 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 
 ---
 
-### 9. Cost Tracking & Budget Control
+### 10. Cost Tracking & Budget Control
 
 **Actors**: You (monitor), System (enforce)
 
@@ -429,7 +490,7 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 
 ---
 
-### 10. Repository Management
+### 11. Repository Management
 
 **Actors**: System (automatic)
 
@@ -671,9 +732,20 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 
 ---
 
-## What v2 Will Add (Future)
+## What Future Versions Will Add
 
-**v2: Multi-User Collaboration**
+**v2: Public Website for Book Display**
+- User-facing website to view digitized books
+- Wikipedia-style change history display
+- Citation generation with version references
+- Search and browse functionality
+
+**v3: Multiple Books/Projects Management**
+- Project dashboard for multiple books
+- Cross-project search and navigation
+- Bulk operations and project templates
+
+**v4: Multi-User Collaboration**
 - Multiple editors
 - Role-based permissions (Admin, Editor, Reviewer)
 - User authentication (GitHub OAuth)
@@ -682,26 +754,34 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 - User activity monitoring
 - Collaborative workflows
 
-See **REQUIREMENTS-v2.md** for details.
+See **REQUIREMENTS-v4.md** for multi-user collaboration details.
 
 ---
 
 ## Next Steps
 
-1. **Define data schemas**: JSON structure for all files
-2. **Design annotation editor**: Canvas UI for bounding boxes
-3. **Plan version tracking UI**: History viewer, diff comparison
-4. **Cost estimation**: Accurate per-book cost calculations
-5. **Repository structure**: Finalize folder organization
-6. **Export templates**: Markdown format specifications
+1. **Set up authentication** (CRITICAL FIRST STEP):
+   - Register GitHub OAuth application
+   - Configure environment variables (client ID/secret)
+   - Implement OAuth callback flow
+   - Set up session management
+   - Add authentication middleware to all routes
+2. **Define data schemas**: JSON structure for all files
+3. **Design annotation editor**: Canvas UI for bounding boxes
+4. **Plan version tracking UI**: History viewer, diff comparison
+5. **Cost estimation**: Accurate per-book cost calculations
+6. **Repository structure**: Finalize folder organization
+7. **Export templates**: Markdown format specifications
 
 ---
 
 ## Notes
 
-- This is v1 ONLY - single user, personal tool
-- Multi-user features deferred to v2
-- Focus: Get core workflow perfect before adding collaboration
+- This is v1 ONLY - single user, personal tool **with authentication**
+- Authentication protects access even for solo user (no unauthorized access)
+- Multi-user collaboration features (roles, permissions, concurrent editing) come in v4
+- Public website (v2), multi-book management (v3), and multi-user features (v4) come later
+- Focus: Get core workflow perfect before adding other features
 - Version tracking is CORE - must be robust and complete
 - Data integrity above all else (working with historical texts)
 - All books are public domain (no copyright restrictions)

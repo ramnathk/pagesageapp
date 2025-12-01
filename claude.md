@@ -22,7 +22,7 @@
 ## 🧪 Testing Philosophy
 
 ### Testing Approach
-- **Coverage target**: 80% minimum (85%+ preferred)
+- **Coverage target**: 90% minimum (95%+ preferred)
 - **Test types required**:
   - Unit tests for business logic (text processing, coordinate calculations, validation)
   - Integration tests for API workflows (OCR pipeline, GitHub operations)
@@ -30,7 +30,7 @@
 - **Test-first verification**: Always run tests before committing changes
 - **Never reduce coverage**: All tests must pass before commit
 - **Test with code**: Add tests in same session as features
-- **TDD approach**: Situational - use for complex algorithms and data transformations
+- **TDD approach**: Always write tests before implementing features/bug fixes
 - **Mock philosophy**: Mock external APIs (Google, GitHub) but prefer integration tests for internal services
 
 ### Special Considerations
