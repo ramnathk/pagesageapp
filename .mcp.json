@@ -7,6 +7,13 @@
         "Authorization": "Bearer ${GITHUB_MCP_TOKEN}"
       }
     },
+    "thoughtbox": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@kastalien-research/thoughtbox"
+      ]
+    },
     "svelte": {
       "type": "stdio",
       "command": "npx",
