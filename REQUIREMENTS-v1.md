@@ -607,6 +607,107 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 
 ---
 
+## Storage Architecture
+
+**Decision**: Hybrid storage model (ADR 001)
+
+### Storage Strategy
+
+**Version-Controlled Data (GitHub Repositories):**
+- Annotation JSON files (page001-annotations.json, page002-annotations.json, etc.)
+- Project metadata (metadata.json)
+- Cost tracking logs (costs.jsonl)
+- Version history (history.jsonl)
+- Export configurations
+
+**Immutable Assets (Google Drive):**
+- Original PDF files (up to 500MB)
+- Extracted page images (page001.png, page002.png, etc.)
+- AI-processed images
+
+### Repository Structure
+
+```
+GitHub Repository: github.com/{org}/pagesage-project-{id}/
+├── metadata.json              # Project metadata
+├── costs.jsonl                # Cost tracking log
+├── history.jsonl              # Global version history
+├── pages/
+│   ├── page001-annotations.json
+│   ├── page002-annotations.json
+│   └── ...
+└── exports/
+    └── markdown/              # Generated exports (.gitignored)
+
+Google Drive: Google Drive/PageSage/
+├── project-{id}/
+│   ├── original.pdf           # Immutable source
+│   └── pages/
+│       ├── page001.png        # Immutable page images
+│       ├── page002.png
+│       └── ...
+```
+
+### Asset References
+
+Annotation files reference Google Drive assets:
+
+```json
+{
+  "projectId": "abc123",
+  "page": 1,
+  "imageUrl": "https://drive.google.com/file/d/{fileId}/view",
+  "imageDriveId": "1a2b3c4d5e6f...",
+  "imageSha256": "d4f3b2a1...",
+  "width": 2480,
+  "height": 3508,
+  "dpi": 300,
+  "annotations": [...]
+}
+```
+
+### Storage Limits
+
+**Google Drive Free Tier: 15GB**
+
+- Max PDF size: 500MB
+- Max pages per book: 2000 pages
+- Max image size: 5MB per page (typical: 2MB)
+- Typical large book: 2.5GB (1000 pages @ 2MB + 500MB PDF)
+- Realistic capacity: ~6 large books within free tier
+- Recommended max: Stay under 12GB to leave buffer
+
+**Cost Projection:**
+- 0-15GB: $0/month (free tier)
+- 15-100GB: $1.99/month
+- Beyond 100GB: Consider migrating to Google Cloud Storage
+
+### Data Integrity
+
+- **SHA-256 checksums**: Stored in JSON, verified on download
+- **Referential integrity**: Validate Drive file IDs on project load
+- **Orphan cleanup**: Periodic detection of Drive files without GitHub refs
+- **Broken link detection**: Alert on missing Drive assets
+
+### Rationale
+
+**Why Google Drive:**
+- ✅ 15GB free tier (3x more than Google Cloud Storage)
+- ✅ Cost-effective for v1 single-user ($0 for realistic usage)
+- ✅ Simple OAuth setup
+- ✅ Easy manual file inspection
+- ✅ Suitable for personal/low-volume use
+
+**Why Hybrid (not all-in-one):**
+- ✅ Git provides version control for annotations (diffs, history, attribution)
+- ✅ Immutable assets don't need version control
+- ✅ GitHub repos have 100MB per-file limit (PDFs can be 500MB)
+- ✅ Separation of concerns: metadata changes vs asset storage
+
+**See**: `docs/adr/001-storage-architecture.md` for full decision rationale
+
+---
+
 ## Additional Requirements
 
 ### Performance

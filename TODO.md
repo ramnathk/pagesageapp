@@ -11,7 +11,7 @@ This document tracks critical gaps identified in REQUIREMENTS-v1.md that must be
 
 ### 1. Storage Architecture Decision
 **Priority:** HIGHEST - BLOCKING
-**Status:** ❌ Not Started
+**Status:** ✅ COMPLETE (2025-12-02)
 
 **Problem:**
 - PDFs can be 500MB (GitHub has 100MB file limit per file)
@@ -19,18 +19,35 @@ This document tracks critical gaps identified in REQUIREMENTS-v1.md that must be
 - GitHub repos have practical limits (~5GB recommended, 100GB hard limit)
 
 **Tasks:**
-- [ ] Research GitHub LFS capabilities and pricing
-- [ ] Research S3/cloud storage options and costs
-- [ ] Decide: GitHub LFS vs S3 vs Local filesystem vs Hybrid
-- [ ] Document storage architecture decision in ADR
-- [ ] Update REQUIREMENTS-v1.md with storage strategy
-- [ ] Specify storage limits (max book size, max images, etc.)
+- [x] Research GitHub LFS capabilities and pricing
+- [x] Research S3/cloud storage options and costs
+- [x] Decide: GitHub LFS vs S3 vs Local filesystem vs Hybrid
+- [x] Document storage architecture decision in ADR
+- [x] Update REQUIREMENTS-v1.md with storage strategy
+- [x] Specify storage limits (max book size, max images, etc.)
 
-**Decision Options:**
-1. **GitHub LFS:** Git-friendly, version controlled, but costs per GB
-2. **S3/Cloud Storage:** Scalable, cheap, but separate from git
-3. **Local Filesystem:** Simple for v1, but not portable
-4. **Hybrid:** Metadata in GitHub, large files in S3
+**Decision: Hybrid Architecture (GitHub + Google Drive)**
+
+**Chosen Approach:**
+- **GitHub repositories** (free): JSON annotations, metadata, version history
+- **Google Drive** (15GB free): PDFs and page images (immutable assets)
+
+**Rationale:**
+- Maximizes free tier storage (15GB vs 5GB for Google Cloud Storage)
+- Cost-optimized: $0/month for ~6 large books
+- Git-friendly diffs for annotations
+- Simple OAuth setup
+- Easy manual file inspection
+
+**Documentation:**
+- ADR: `docs/adr/001-storage-architecture.md`
+- Requirements: REQUIREMENTS-v1.md § Storage Architecture
+
+**Storage Limits:**
+- Max PDF: 500MB
+- Max pages per book: 2000
+- Max image size: 5MB/page (typical: 2MB)
+- Free tier capacity: ~6 large books (12GB used, 3GB buffer)
 
 ---
 
@@ -376,14 +393,14 @@ PUBLIC_URL=
 ## 📊 Summary
 
 **Total Items:** 15
-- **Critical (Blocking):** 5 ⛔
+- **Critical (Blocking):** 5 ⛔ (1 complete, 4 remaining)
 - **Important (High Priority):** 7 ⚠️
 - **Nice-to-Have (Low Priority):** 3 📋
 
 **Status:**
-- ❌ Not Started: 15
+- ❌ Not Started: 14
 - 🏗️ In Progress: 0
-- ✅ Complete: 0
+- ✅ Complete: 1
 
 ---
 
@@ -429,3 +446,4 @@ PUBLIC_URL=
 ## 🔄 Update Log
 
 - **2025-12-01:** Initial TODO created from requirements gap analysis
+- **2025-12-02:** ✅ Completed #1 Storage Architecture Decision (Hybrid: GitHub + Google Drive)
