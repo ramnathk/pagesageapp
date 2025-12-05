@@ -238,10 +238,51 @@ Every edit is tracked with full attribution:
 - **Version tracking**: Mark as AI-generated (version 1)
 - **Maintain box index**: Update project metadata with all box locations
 
+**Advanced Layout Requirements** (validated against complex samples):
+
+1. **Multi-column layouts:**
+   - Detect 2-4 column boundaries
+   - Correct reading order: column 1 top→bottom, then column 2, etc.
+   - Handle footnotes per-column (not just per-page)
+   - Distinguish column text from footnotes
+
+2. **Footnote structure:**
+   - Detect 10+ footnotes per page
+   - Footnotes at bottom of each column (not just page bottom)
+   - Link superscript references (¹, ², ³) to corresponding footnotes
+   - Handle footnotes with mixed languages (English + IAST + Devanagari)
+   - Cross-references within footnotes
+
+3. **Mixed language detection:**
+   - Three languages in same paragraph: English + IAST + Devanagari
+   - IAST in italic distinguished from emphasized text
+   - Word-level language detection (not just box-level)
+   - Preserve font styling (italic, bold) as semantic indicators
+
+4. **Parallel text alignment:**
+   - Side-by-side English ↔ Sanskrit columns
+   - Semantic verse alignment (verse 1 ↔ || १ ||)
+   - Linked translation pairs
+
+5. **Index pages:**
+   - 3-4 column dense layouts
+   - Thousands of small entries (6-8pt font)
+   - Devanagari entries with page number references
+   - Handle entry wrapping across lines
+
+6. **Reading order complexity:**
+   - Multi-column: Top-left → Bottom-left → Top-right → Bottom-right
+   - Parallel text: Pair verses by number, not position
+   - Footnotes: After column content, before next column
+
 **See**: `docs/data-schemas.md` sections on:
 - Inline Reference structure
 - Cross-page reference resolution
 - Box index maintenance
+
+**See**: `docs/backend-architecture.md` section on:
+- Sample file complexity analysis
+- Layout detection requirements for simple vs complex texts
 
 ---
 
