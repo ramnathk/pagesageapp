@@ -129,23 +129,31 @@ This document tracks critical gaps identified in REQUIREMENTS-v1.md that must be
 
 ### 5. Complete Data Schemas Definition
 **Priority:** HIGH - NEEDED FOR IMPLEMENTATION
-**Status:** ❌ Not Started
+**Status:** ✅ COMPLETE (2025-12-05)
 
 **Problem:**
 - Only version history JSON example provided
 - Need schemas for all data structures
 
 **Tasks:**
-- [ ] Define `metadata.json` schema (project metadata)
-- [ ] Define user profile schema (for authentication)
-- [ ] Define cost tracking log schema (`costs.jsonl`)
-- [ ] Define bounding box coordinate system (origin, units, precision)
-- [ ] Define OCR result format schema
-- [ ] Define export configuration schema
-- [ ] Define image metadata schema (DPI, dimensions, format)
-- [ ] Add "Data Schemas" section to REQUIREMENTS-v1.md
-- [ ] Create TypeScript interfaces for all schemas
-- [ ] Add JSON Schema validation files
+- [x] Define `metadata.json` schema (project metadata)
+- [x] Define user profile schema (for authentication)
+- [x] Define cost tracking log schema (`costs.jsonl`)
+- [x] Define bounding box coordinate system (origin, units, precision)
+- [x] Define OCR result format schema
+- [x] Define export configuration schema
+- [x] Define image metadata schema (DPI, dimensions, format)
+- [x] Add "Data Schemas" section to REQUIREMENTS-v1.md
+- [x] Create TypeScript interfaces for all schemas
+- [ ] Add JSON Schema validation files (implementation task)
+
+**Completed:**
+- Created comprehensive `docs/data-schemas.md` with all 9 schemas
+- Defined TypeScript interfaces for all data structures
+- Documented coordinate system (top-left origin, integer pixels)
+- Specified JSONL format for cost logs (append-only, git-friendly)
+- Included data integrity validation requirements
+- Added examples for all schemas
 
 **Schemas Needed:**
 ```
@@ -393,14 +401,14 @@ PUBLIC_URL=
 ## 📊 Summary
 
 **Total Items:** 15
-- **Critical (Blocking):** 5 ⛔ (1 complete, 4 remaining)
+- **Critical (Blocking):** 5 ⛔ (2 complete, 3 remaining)
 - **Important (High Priority):** 7 ⚠️
 - **Nice-to-Have (Low Priority):** 3 📋
 
 **Status:**
-- ❌ Not Started: 14
+- ❌ Not Started: 13
 - 🏗️ In Progress: 0
-- ✅ Complete: 1
+- ✅ Complete: 2
 
 ---
 
@@ -447,3 +455,4 @@ PUBLIC_URL=
 
 - **2025-12-01:** Initial TODO created from requirements gap analysis
 - **2025-12-02:** ✅ Completed #1 Storage Architecture Decision (Hybrid: GitHub + Google Drive)
+- **2025-12-05:** ✅ Completed #5 Complete Data Schemas Definition (docs/data-schemas.md)

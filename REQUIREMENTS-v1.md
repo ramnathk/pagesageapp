@@ -213,20 +213,35 @@ Every edit is tracked with full attribution:
    - Reading order (sequence)
    - Confidence score
    - Links (footnote refs → footnotes)
-4. **Version 1 created**: "AI-generated layout"
-5. Results stored in repository
+4. **Inline footnote reference detection**:
+   - Detects superscript markers within text (¹, ², ³, etc.)
+   - Creates inline reference metadata with character offsets
+   - Links references to target footnote boxes
+   - Supports cross-page footnote references
+5. **Box index creation**:
+   - All detected boxes added to project-level box index
+   - Enables efficient cross-page reference resolution
+6. **Version 1 created**: "AI-generated layout"
+7. Results stored in repository
 
 **Requirements**:
 - Detect Devanagari vs Roman script
 - Distinguish Sanskrit vs Hindi (both Devanagari)
 - Detect IAST transliteration
-- Link footnote references to footnotes
+- **Detect inline footnote references** (superscripts in text)
+- Link footnote references to footnotes (same-page and cross-page)
 - Distinguish English translation vs commentary
 - Handle 2-column and multi-column layouts
 - Detect and preserve images
 - Preserve reading order
 - Store confidence scores
 - **Version tracking**: Mark as AI-generated (version 1)
+- **Maintain box index**: Update project metadata with all box locations
+
+**See**: `docs/data-schemas.md` sections on:
+- Inline Reference structure
+- Cross-page reference resolution
+- Box index maintenance
 
 ---
 
@@ -364,6 +379,7 @@ Every edit is tracked with full attribution:
    - View confidence score
    - Edit text directly
    - Add correction notes (optional)
+   - **Handle inline footnote references** (if text contains references)
    - Mark as "verified"
 3. **Every text edit creates version**:
    ```
@@ -371,8 +387,16 @@ Every edit is tracked with full attribution:
    Version 5: You corrected word 3 (Jan 15, 11:00)
               "OCR read 'धर्मक्षेत्रे' as 'धर्मक्षैत्रे'"
    ```
-4. Changes saved to repository
-5. **Full version chain**:
+4. **Automatic inline reference offset updates**:
+   - When text is edited, system automatically updates character offsets
+   - Warns if edits affect inline footnote references
+   - Marks references as "needs review" if offset becomes invalid
+5. **Validation after edits**:
+   - System validates all inline references still point to correct positions
+   - Detects orphaned references (if text deletion removed reference marker)
+   - Suggests fixes for offset mismatches
+6. Changes saved to repository
+7. **Full version chain**:
    - OCR output (v4) → Your correction (v5) → Final
 
 **Requirements**:
@@ -386,6 +410,12 @@ Every edit is tracked with full attribution:
 - Comment on corrections (why changed)
 - Spell check (Sanskrit/Hindi dictionaries)
 - **Preserve original OCR**: Always keep initial output
+- **Inline reference management**: Add/edit/remove footnote references
+- **Automatic offset updates**: Update reference positions when text changes
+- **Validation**: Real-time validation of reference integrity
+- **Cross-page navigation**: Jump to footnote references on other pages
+
+**See**: `docs/data-schemas.md` for complete inline reference specification and validation algorithms
 
 ---
 
@@ -498,9 +528,9 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 1. Each project gets private repository:
    ```
    pagesage-books/book-{id}-{slug}/
-     metadata.json
+     metadata.json          (includes box index for cross-page refs)
      pages/
-       page-001.json    (annotations + version history)
+       page-001.json        (annotations + version history + inline refs)
        page-002.json
      images/
        original/
@@ -511,11 +541,14 @@ O Sanjaya, what did my sons and the sons of Pandu do...
        book.md
      logs/
        costs.jsonl
+       validation.jsonl     (validation results)
    ```
 
 2. **Every change committed**:
    - Annotation edits → git commit
-   - Text corrections → git commit
+   - Text corrections → git commit (with offset updates)
+   - Inline reference changes → git commit
+   - Box index updates → git commit (in metadata.json)
    - Export → git commit
    - Commit messages include: "Updated page 45 annotations"
 
@@ -523,6 +556,12 @@ O Sanjaya, what did my sons and the sons of Pandu do...
    - Use `git log` to see all changes
    - Use `git show <sha>` to see specific change
    - Use `git revert` if needed
+
+4. **Data integrity**:
+   - Box index kept in sync with page changes
+   - Validation runs automatically on save
+   - Orphaned references/footnotes detected
+   - Cross-page reference integrity maintained
 
 **Requirements**:
 - One repository per project
@@ -533,12 +572,24 @@ O Sanjaya, what did my sons and the sons of Pandu do...
 - Git-friendly diffs
 - Never lose data (git history)
 - **Attribution in commits**: Include user name/email
+- **Box index maintenance**: Update metadata.json when boxes created/deleted
+- **Validation logs**: Track data quality over time
+- **Atomic operations**: Ensure box index and page data stay consistent
+
+**See**: `docs/data-schemas.md` sections on:
+- Project Metadata (with box index)
+- Validation Status tracking
+- Cross-page reference resolution
 
 ---
 
-## Data Model: Version Tracking
+## Data Model & Schemas
 
 **Core Concept**: Every page annotation file maintains full edit history
+
+**Complete Schema Documentation**: See **[docs/data-schemas.md](docs/data-schemas.md)** for comprehensive TypeScript interfaces and JSON examples for all 9 data structures.
+
+### Version Tracking Structure
 
 ```json
 {
@@ -867,7 +918,7 @@ See **REQUIREMENTS-v4.md** for multi-user collaboration details.
    - Implement OAuth callback flow
    - Set up session management
    - Add authentication middleware to all routes
-2. **Define data schemas**: JSON structure for all files
+2. ✅ **Define data schemas**: JSON structure for all files (COMPLETE - see docs/data-schemas.md)
 3. **Design annotation editor**: Canvas UI for bounding boxes
 4. **Plan version tracking UI**: History viewer, diff comparison
 5. **Cost estimation**: Accurate per-book cost calculations
