@@ -1,0 +1,699 @@
+{
+  "testDate": "2025-12-08T20:58:29.140Z",
+  "imagePath": "test-samples/kalika-page-8-08.png",
+  "model": "gemini-2.5-flash",
+  "results": {
+    "boundingBoxes": {
+      "success": true,
+      "response": {
+        "imageWidth": 846,
+        "imageHeight": 1047,
+        "blocks": [
+          {
+            "id": "block-0",
+            "type": "page-number",
+            "text": "685",
+            "boundingBox": {
+              "x": 804,
+              "y": 48,
+              "width": 39,
+              "height": 13
+            },
+            "language": "en",
+            "readingOrder": 0,
+            "confidence": 1
+          },
+          {
+            "id": "block-1",
+            "type": "heading",
+            "text": "Chapter Eighty Eight",
+            "boundingBox": {
+              "x": 139,
+              "y": 80,
+              "width": 269,
+              "height": 29
+            },
+            "language": "en",
+            "readingOrder": 1,
+            "confidence": 1
+          },
+          {
+            "id": "block-2",
+            "type": "paragraph",
+            "text": "nor should take meat on the day of religious ceremony; king\nshould not mount ass, camel and pregnant woman.",
+            "boundingBox": {
+              "x": 78,
+              "y": 142,
+              "width": 435,
+              "height": 38
+            },
+            "language": "en",
+            "readingOrder": 2,
+            "confidence": 1
+          },
+          {
+            "id": "block-3",
+            "type": "verse",
+            "text": "एवं नययुतो राजा चतुरङ्गं विवर्धयन्।",
+            "boundingBox": {
+              "x": 107,
+              "y": 182,
+              "width": 349,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 3,
+            "confidence": 1
+          },
+          {
+            "id": "block-4",
+            "type": "verse",
+            "text": "आत्मानं सततं रक्षन् सदा वीर्यं विवर्धयेत्॥६१॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 201,
+              "width": 397,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 4,
+            "confidence": 1
+          },
+          {
+            "id": "block-5",
+            "type": "verse",
+            "text": "बहुशः कथयामास सगराय महात्मने।",
+            "boundingBox": {
+              "x": 544,
+              "y": 143,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 5,
+            "confidence": 1
+          },
+          {
+            "id": "block-6",
+            "type": "verse",
+            "text": "तन्नास्ति यत् पुरोर्वण कथितं सगराय न॥६६॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 161,
+              "width": 299,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 6,
+            "confidence": 1
+          },
+          {
+            "id": "block-7",
+            "type": "paragraph",
+            "text": "Thus king following the right path should increase the\nstrength of his four-fold army and always protect himself by\nenhancing his power.",
+            "boundingBox": {
+              "x": 78,
+              "y": 229,
+              "width": 444,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 7,
+            "confidence": 1
+          },
+          {
+            "id": "block-8",
+            "type": "paragraph",
+            "text": "The sage had narrated in great detail all these to the\ngreat soul Sagara. There is nothing on which the king Sagar\nwas not instructed by Aurva in the past.",
+            "boundingBox": {
+              "x": 530,
+              "y": 188,
+              "width": 299,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 8,
+            "confidence": 1
+          },
+          {
+            "id": "block-9",
+            "type": "verse",
+            "text": "वीजक्षयकरनिरयं भक्ष्यं भोज्यं च पानकम्।",
+            "boundingBox": {
+              "x": 107,
+              "y": 294,
+              "width": 412,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 9,
+            "confidence": 1
+          },
+          {
+            "id": "block-10",
+            "type": "verse",
+            "text": "वर्जयेत् दारशाकाचान् बहुस्स्रं बहुतिवकटकम्॥६२॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 313,
+              "width": 409,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 10,
+            "confidence": 1
+          },
+          {
+            "id": "block-11",
+            "type": "verse",
+            "text": "राजनीतिः सतां नीतिर्यच्चान्यच्छास्त्रसम्भवा।",
+            "boundingBox": {
+              "x": 544,
+              "y": 257,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 11,
+            "confidence": 1
+          },
+          {
+            "id": "block-12",
+            "type": "verse",
+            "text": "संहितासु पुराणेबु यच्चागमचये स्थितम्॥६६॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 275,
+              "width": 299,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 12,
+            "confidence": 1
+          },
+          {
+            "id": "block-13",
+            "type": "verse",
+            "text": "सर्वं शुभाव सगरो मुखादोर्वस्य धीमतः।",
+            "boundingBox": {
+              "x": 544,
+              "y": 294,
+              "width": 299,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 13,
+            "confidence": 1
+          },
+          {
+            "id": "block-14",
+            "type": "verse",
+            "text": "तेषां तु कथितं किञ्चिदुदृश्य द्विजसत्तमाः॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 312,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 14,
+            "confidence": 1
+          },
+          {
+            "id": "block-15",
+            "type": "paragraph",
+            "text": "King should always avoid taking such food, food that is\nto be taken with and without mastication, and drink, which\ncauses to dry up his semen, he also avoid taking vegetables,\nkṣāra (curry prepared with sodi bicarb), highly soar and\nbitter items.",
+            "boundingBox": {
+              "x": 78,
+              "y": 343,
+              "width": 444,
+              "height": 95
+            },
+            "language": "en",
+            "readingOrder": 15,
+            "confidence": 1
+          },
+          {
+            "id": "block-16",
+            "type": "paragraph",
+            "text": "The State polity, the conduct of the honest persons,\nmatters relating to scriptures, and whatever is there in the\nVeda, saṁhitās, in the purāṇas and also in the collection of\nĀgama—the king Sagara had listened to all from the great\nsage Aurava. O great brāhmaṇas ! I have stated to you\nsomething from out of those discourses.",
+            "boundingBox": {
+              "x": 530,
+              "y": 341,
+              "width": 299,
+              "height": 128
+            },
+            "language": "en",
+            "readingOrder": 16,
+            "confidence": 1
+          },
+          {
+            "id": "block-17",
+            "type": "verse",
+            "text": "कांश्य-राजतपात्रस्थं तोयं न चाग्नरवं दर्शनम्।",
+            "boundingBox": {
+              "x": 107,
+              "y": 454,
+              "width": 403,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 17,
+            "confidence": 1
+          },
+          {
+            "id": "block-18",
+            "type": "verse",
+            "text": "मूत्रवृद्धिकरं वीर्यक्षयंकारि विवर्जयेत्॥६३॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 472,
+              "width": 415,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 18,
+            "confidence": 1
+          },
+          {
+            "id": "block-19",
+            "type": "verse",
+            "text": "विष्णोधर्मोत्तरे पूर्वं मया रहस्यभाषितम्।",
+            "boundingBox": {
+              "x": 544,
+              "y": 477,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 19,
+            "confidence": 1
+          },
+          {
+            "id": "block-20",
+            "type": "verse",
+            "text": "राजनीतिं सदाचारं वेदवेदाङ्गाज्जगुत्तम्॥७०॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 496,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 20,
+            "confidence": 1
+          },
+          {
+            "id": "block-21",
+            "type": "paragraph",
+            "text": "King should not drink water kept in a vessal of brass\nmatel or silver, this increase the flow of urine and destroys\nthe semen, therefore, this should be avoided.",
+            "boundingBox": {
+              "x": 78,
+              "y": 500,
+              "width": 444,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 21,
+            "confidence": 1
+          },
+          {
+            "id": "block-22",
+            "type": "paragraph",
+            "text": "I had stated the State-polity. good conduct having\napproval of the Vedas and auxiliaries of the Vedas—all these\nI stated earlier in the Viṣṇudharmottara.",
+            "boundingBox": {
+              "x": 530,
+              "y": 524,
+              "width": 299,
+              "height": 69
+            },
+            "language": "en",
+            "readingOrder": 22,
+            "confidence": 1
+          },
+          {
+            "id": "block-23",
+            "type": "verse",
+            "text": "ताम्राद्यैः स्वर्णशीशानां पात्रस्थं फलचर्मणोः।",
+            "boundingBox": {
+              "x": 107,
+              "y": 570,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 23,
+            "confidence": 1
+          },
+          {
+            "id": "block-24",
+            "type": "verse",
+            "text": "शुक्रवृद्धिकरं तोयं तदुपासीत यत्नतः॥६४॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 589,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 24,
+            "confidence": 1
+          },
+          {
+            "id": "block-25",
+            "type": "verse",
+            "text": "रहस्यं सततं विष्णोर्धर्मे धिजसत्तमाः।",
+            "boundingBox": {
+              "x": 544,
+              "y": 600,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 25,
+            "confidence": 1
+          },
+          {
+            "id": "block-26",
+            "type": "verse",
+            "text": "यच्चान्वदितमन्यत्र गदितं वा संशयम्॥७१॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 618,
+              "width": 299,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 26,
+            "confidence": 1
+          },
+          {
+            "id": "block-27",
+            "type": "verse",
+            "text": "संशयच्छेदनं तेषु युष्मभ्यं कथितं द्विजाः।",
+            "boundingBox": {
+              "x": 544,
+              "y": 637,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 27,
+            "confidence": 1
+          },
+          {
+            "id": "block-28",
+            "type": "verse",
+            "text": "अनुक्तसंशयच्छेदि पुराणं कालिकाह्वयम्।",
+            "boundingBox": {
+              "x": 544,
+              "y": 655,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 28,
+            "confidence": 1
+          },
+          {
+            "id": "block-29",
+            "type": "verse",
+            "text": "योज्यसेत् सततं विप्रः स वेदानां फल लभैत्॥७२॥",
+            "boundingBox": {
+              "x": 544,
+              "y": 674,
+              "width": 298,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 29,
+            "confidence": 1
+          },
+          {
+            "id": "block-30",
+            "type": "paragraph",
+            "text": "The water kept in a vessal of copper, iron and lead and\nalso water kept in fruit and hide increases semen, therefore,\nthis should be taken.",
+            "boundingBox": {
+              "x": 78,
+              "y": 618,
+              "width": 444,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 30,
+            "confidence": 1
+          },
+          {
+            "id": "block-31",
+            "type": "verse",
+            "text": "सर्वमेवषु कृत्येषु सदाचारेषु तिष्ठतः।",
+            "boundingBox": {
+              "x": 107,
+              "y": 686,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 31,
+            "confidence": 1
+          },
+          {
+            "id": "block-32",
+            "type": "paragraph",
+            "text": "O best of brāhmaṇas ! always read the secret narration in\nthe Viṣṇudharmottara, and also whatever is reproduced in\nother scriptures, or stated in a doubt-ful manner. O\nbrāhmaṇas ! what I have stated to you shall remove all\ndoubts. This purāṇa, called Kalikā, is the remover all doubts\nand it provides that what is not stated (in other scriptures).\nIf a brāhmaṇa practices (reciting this) he attains the merit of\nreciting the Vedas.",
+            "boundingBox": {
+              "x": 530,
+              "y": 701,
+              "width": 299,
+              "height": 156
+            },
+            "language": "en",
+            "readingOrder": 32,
+            "confidence": 1
+          },
+          {
+            "id": "block-33",
+            "type": "verse",
+            "text": "मुखत्वेहे विविधामु भोगानेंद्रं स्थानं व्रजेत् परम्॥६५॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 705,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 33,
+            "confidence": 1
+          },
+          {
+            "id": "block-34",
+            "type": "paragraph",
+            "text": "In all activities king should follow the good manners;\nif he acts like this he enjoys all enjoyable things in this world\nand attains Indrahood after death.",
+            "boundingBox": {
+              "x": 78,
+              "y": 732,
+              "width": 444,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 34,
+            "confidence": 1
+          },
+          {
+            "id": "block-35",
+            "type": "subheading",
+            "text": "मार्कण्डेय उवाच—",
+            "boundingBox": {
+              "x": 161,
+              "y": 796,
+              "width": 224,
+              "height": 22
+            },
+            "language": "sa",
+            "readingOrder": 35,
+            "confidence": 1
+          },
+          {
+            "id": "block-36",
+            "type": "verse",
+            "text": "एवमोर्वस्तु सगरं शशास मुनिपुङ्गवः।",
+            "boundingBox": {
+              "x": 107,
+              "y": 829,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 36,
+            "confidence": 1
+          },
+          {
+            "id": "block-37",
+            "type": "verse",
+            "text": "शास्त्राणि चैव सर्वाणि सदाचारांश्च गृह्णाकन्॥६६॥",
+            "boundingBox": {
+              "x": 107,
+              "y": 847,
+              "width": 416,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 37,
+            "confidence": 1
+          },
+          {
+            "id": "block-38",
+            "type": "chapter-ending-verse",
+            "text": "इति श्रीकालिकपुराणे अष्टाशीतितमोऽध्यायः॥८८॥",
+            "boundingBox": {
+              "x": 583,
+              "y": 869,
+              "width": 246,
+              "height": 19
+            },
+            "language": "sa",
+            "readingOrder": 38,
+            "confidence": 1
+          },
+          {
+            "id": "block-39",
+            "type": "paragraph",
+            "text": "Mārkaṇḍeya said :",
+            "boundingBox": {
+              "x": 78,
+              "y": 877,
+              "width": 149,
+              "height": 17
+            },
+            "language": "en",
+            "readingOrder": 39,
+            "confidence": 1
+          },
+          {
+            "id": "block-40",
+            "type": "chapter-ending-summary",
+            "text": "Here ends the eighty-eighth chapter of the holy\nKalikā purāṇa, called Viṣṇu yajña and good\nconduct.",
+            "boundingBox": {
+              "x": 544,
+              "y": 895,
+              "width": 298,
+              "height": 55
+            },
+            "language": "en",
+            "readingOrder": 40,
+            "confidence": 1
+          },
+          {
+            "id": "block-41",
+            "type": "paragraph",
+            "text": "Thus the great sage Aurva taught that king Sagara all\nscriptures and good conduct.",
+            "boundingBox": {
+              "x": 78,
+              "y": 904,
+              "width": 444,
+              "height": 38
+            },
+            "language": "en",
+            "readingOrder": 41,
+            "confidence": 1
+          },
+          {
+            "id": "block-42",
+            "type": "footnote",
+            "text": "1. \"\"सम्मतम् M. 2. एकनवतितमः V.",
+            "boundingBox": {
+              "x": 530,
+              "y": 969,
+              "width": 291,
+              "height": 17
+            },
+            "language": "mixed",
+            "readingOrder": 42,
+            "confidence": 1
+          }
+        ],
+        "layoutStructure": {
+          "columns": 2,
+          "hasFootnotes": true,
+          "hasHeaders": true
+        }
+      }
+    },
+    "multiColumn": {
+      "success": true,
+      "response": {
+        "columnCount": 2,
+        "columnBoundaries": [
+          {
+            "x": 99,
+            "width": 372
+          },
+          {
+            "x": 514,
+            "width": 371
+          }
+        ],
+        "readingOrder": "left-to-right",
+        "hasFootnotes": true,
+        "footnoteRegion": {
+          "y": 999,
+          "height": 16
+        }
+      }
+    },
+    "languageDetection": {
+      "success": true,
+      "response": {
+        "languages": [
+          {
+            "script": "devanagari",
+            "language": "sanskrit",
+            "percentage": 60
+          },
+          {
+            "script": "latin",
+            "language": "english",
+            "percentage": 40
+          }
+        ],
+        "hasIAST": true,
+        "mixedContent": true
+      }
+    }
+  },
+  "verdict": "FAIL",
+  "failureReasons": [
+    "CRITICAL: Image downscaling without disclosure (846x1047 reported vs 1867x2435 actual)",
+    "CRITICAL: Bounding box widths grossly inaccurate (extend beyond text boundaries, cross columns)",
+    "CRITICAL: Devanagari text extraction errors (character misrecognition, hallucinations)",
+    "MAJOR: Missing content blocks (~30-40% of page content not detected)",
+    "MAJOR: Overlapping bounding boxes (58% of blocks overlap with others)",
+    "MODERATE: Bounding box heights incorrect (some cover multiple lines incorrectly)"
+  ],
+  "manualVerification": {
+    "performed": true,
+    "date": "2025-12-08",
+    "method": "Visual overlay of bounding boxes on original image with coordinate scaling",
+    "findings": {
+      "block17": {
+        "issue": "Text extraction incorrect for Devanagari",
+        "expected": "Sanskrit verse text visible in image",
+        "actual": "कांश्य-राजतपात्रस्थं तोयं न चाग्नरवं दर्शनम्।",
+        "severity": "CRITICAL"
+      },
+      "block21": {
+        "issue": "Bounding box width extends into adjacent column",
+        "width": "979px (scaled) covers 52% of image width",
+        "expectedWidth": "~400-500px (single column)",
+        "severity": "CRITICAL"
+      },
+      "missingBlocks": {
+        "estimated": "20-30 blocks",
+        "types": ["verse numbers", "portions of paragraphs", "some footnotes"],
+        "severity": "MAJOR"
+      }
+    }
+  },
+  "recommendation": "REJECT - Unsuitable for PageSage project due to Devanagari OCR errors and coordinate inaccuracy",
+  "detailedReport": "docs/gemini-2.5-flash-evaluation-report.md"
+}

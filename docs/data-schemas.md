@@ -2322,7 +2322,7 @@ interface ImageMetadata {
   driveUrl?: string;           // Direct download URL (if available)
 
   // File Information
-  fileName: string;            // File name (e.g., "page-001.png")
+  fileName: string;            // File name (e.g., "page-001.png" or "enhanced-page-001.png")
   format: ImageFormat;         // Image format
   fileSizeBytes: number;       // File size
   sha256: string;              // Checksum for integrity
@@ -2336,12 +2336,27 @@ interface ImageMetadata {
 
   // Processing Status
   isPreprocessed: boolean;     // Has undergone preprocessing
-  preprocessingApplied?: string[]; // List of preprocessing steps
+  preprocessingApplied?: PreprocessingOperation[]; // Operations applied (if any)
+
+  // Quality Metrics (from pre-processing analysis)
+  qualityMetrics?: {
+    skewAngle: number;         // Detected skew in degrees (0 = perfect)
+    contrast: number;          // Contrast level 0-1 (higher is better)
+    brightness: number;        // Brightness 0-1 (0.4-0.8 ideal)
+    noiseLevel: number;        // Noise 0-1 (lower is better)
+    overallQuality: 'excellent' | 'good' | 'fair' | 'poor';
+  };
 
   // Timestamps
   uploadedAt: string;          // ISO 8601 timestamp
   processedAt?: string;        // ISO 8601 timestamp (if preprocessed)
 }
+
+type PreprocessingOperation =
+  | 'deskew'            // Rotation correction
+  | 'color-correction'  // Normalize colors, improve contrast
+  | 'noise-reduction'   // Remove speckles and grain
+  | 'border-crop';      // Remove margins
 
 type ImageFormat =
   | 'png'
@@ -2356,7 +2371,7 @@ type ImageFormat =
 ```json
 {
   "driveFileId": "1x2y3z4a5b6c7d8e9f0g",
-  "fileName": "page-001.png",
+  "fileName": "enhanced-page-001.png",
   "format": "png",
   "fileSizeBytes": 2097152,
   "sha256": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0",
@@ -2367,6 +2382,13 @@ type ImageFormat =
   "bitDepth": 8,
   "isPreprocessed": true,
   "preprocessingApplied": ["deskew", "color-correction", "noise-reduction"],
+  "qualityMetrics": {
+    "skewAngle": 1.8,
+    "contrast": 0.42,
+    "brightness": 0.38,
+    "noiseLevel": 0.18,
+    "overallQuality": "poor"
+  },
   "uploadedAt": "2025-01-15T10:05:00Z",
   "processedAt": "2025-01-15T10:08:00Z"
 }

@@ -1,5 +1,64 @@
 # Claude Code Preferences - PageSage App
 
+
+### Tool Usage Preferences
+
+**Testing:**
+- **Always use** `mcp__vitest-runner__run-vitest` for running tests
+- **Never use** `npm test` directly
+- **Coverage reports**: Use `mcp__vitest-runner__run-vitest-coverage`
+- **Benefits**: Better integration, real-time feedback in Claude context
+
+**Documentation Lookup (priority order):**
+1. **context7** (first choice) - Official library/framework documentation
+   - Use `mcp__context7__resolve-library-id` then `mcp__context7__get-library-docs`
+   - Best for: React, Svelte, TypeScript, Obsidian API, npm packages
+   - Get API references, official guides, authoritative docs
+2. **exa** (second choice) - Community content, real-world examples
+   - Use `mcp__exa__get_code_context_exa` for programming-related queries
+   - Best for: Blog posts, Stack Overflow, GitHub issues, tutorials, troubleshooting
+
+**Web Search:**
+- **Always use** `mcp__exa__web_search_exa` for general web searches
+- **Never use** built-in WebSearch
+- **Reason**: Better quality results, can scrape specific URLs, more reliable
+
+**Planning & Architecture:**
+- **Use thoughtbox** (`mcp__thoughtbox__thoughtbox`) before starting complex work
+- **When**: Multi-step features, architecture decisions, debugging complex issues
+- **Templates**: Sequential Feynman template for deep learning of new concepts
+- **Benefits**: Better plans, fewer mistakes, clearer thinking process
+
+### Testing Approach
+- **Never reduce test coverage**: All tests must pass before committing
+- **Test-first verification**: Always run tests before and after changes
+- **Coverage targets**: Maintain or improve existing 805 tests
+- **Test alongside code**: When adding features, add tests in same session
+- **E2E for UI**: UI components should have end-to-end tests
+- **Documentation-driven tests**: Update test-suite.md to auto-generate new tests
+
+### Svelte Conventions
+- **Accessibility first**: Proper labels, ARIA, semantic HTML
+- **Always use keys**: Every `{#each}` block must have unique key
+- **Form semantics**: Use `<fieldset>/<legend>` for grouped inputs
+- **Component verification**: Run autofixer before committing any .svelte file
+- **Version**: Svelte 4 (verify in package.json)
+
+### Git Standards
+- **Commit message format**:
+  - First line: Action verb + concise description
+  - Body: Bullet list of changes
+- **Rebase preferred**: Use `git pull --rebase` to avoid merge commits
+- **Small commits**: Focused changes, one concern per commit
+- **Build verification**: Verify builds succeed before releasing
+
+### Release Workflow Preferences
+- **Semantic versioning**: Follow semver strictly (no 'v' prefix in tags)
+- **Release artifacts**: Always attach main.js, manifest.json, styles.css
+- **Release notes**: Include features, fixes, test count, requirements
+- **Tag management**: Delete old tags before recreating
+- **Verification**: Test installation process (BRAT for Obsidian)
+
 ## Project Overview
 
 **PageSage** is an Ancient Text OCR & Annotation Platform for digitizing Sanskrit, Hindi, and English multi-language books with AI-assisted layout detection and human-in-the-loop correction.

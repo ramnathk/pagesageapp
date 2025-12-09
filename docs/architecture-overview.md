@@ -163,6 +163,8 @@ Frontend redirects to project page
 
 ### Flow 3: PDF Processing & AI Layout Detection
 
+**UPDATED:** Now includes quality check and optional preprocessing
+
 ```
 User clicks "Start Processing"
     ↓
@@ -173,7 +175,8 @@ Backend creates job record (in-memory or file):
   {
     jobId: "job-abc123",
     projectId: "proj_abc123",
-    type: "ai-layout-detection",
+    type: "pdf-processing",
+    phases: ["quality-check", "preprocessing?", "ai-layout-detection"],
     status: "queued",
     totalPages: 700,
     processedPages: 0,
@@ -185,42 +188,99 @@ Return job ID to frontend
 Frontend connects to SSE stream:
   EventSource('/api/jobs/job-abc123/stream')
     ↓
-┌──────────────────────────────────────────┐
-│   BACKGROUND WORKER (Railway/Fly.io)     │
-├──────────────────────────────────────────┤
-│ While job in queue:                      │
-│                                          │
-│ For each page (1 to 700):                │
-│   1. Download page image from Drive      │
-│   2. Call Gemini 2.5 Flash API:          │
-│      └─> Get layout + OCR                │
-│   3. Parse response:                     │
-│      - Extract bounding boxes            │
-│      - Detect columns, verses, footnotes │
-│      - Extract text with confidence      │
-│      - Detect inline footnote references │
-│   4. Create page-NNN.json:               │
-│      {                                   │
-│        pageId: "page-001",               │
-│        image: {driveFileId: "..."},      │
-│        currentState: {                   │
-│          boundingBoxes: [...]            │
-│        },                                │
-│        versionHistory: [{                │
-│          version: 1,                     │
-│          changeType: "ai_generated"      │
-│        }]                                │
-│      }                                   │
-│   5. Update boxIndex in metadata.json   │
-│   6. Commit to GitHub                   │
-│   7. Append to costs.jsonl:             │
-│      {"operation": "layout-detection",  │
-│       "cost": 0.00038, ...}             │
-│   8. Update job progress                │
-│   9. Emit SSE event → frontend updates  │
-│                                          │
-│ Job complete!                            │
-└──────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│   BACKGROUND WORKER (Railway/Fly.io)                           │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│ PHASE 1: QUALITY CHECK (~20 seconds)                          │
+│ ──────────────────────────────────────────                   │
+│ 1. Download PDF from Google Drive                            │
+│ 2. Extract 5 sample pages from MIDDLE of book:               │
+│    └─> Pages at 25%, 40%, 50%, 60%, 75% (not first 5!)      │
+│ 3. Analyze quality of each sample:                           │
+│    - Skew angle (rotation)                                   │
+│    - Contrast level                                          │
+│    - Brightness                                              │
+│    - Noise level                                             │
+│    - Border detection                                        │
+│ 4. Make recommendation:                                      │
+│    - Skip: 0-1 pages need work (excellent quality)          │
+│    - Optional: 2 pages need work (good quality)             │
+│    - Recommended: 3+ pages need work (fair/poor quality)    │
+│ 5. Emit SSE event with recommendation → frontend shows UI   │
+│                                                              │
+│ ⏸️  WAIT FOR USER DECISION                                   │
+│                                                              │
+│ PHASE 2A: PREPROCESSING (if enabled, ~10-15 min)            │
+│ ────────────────────────────────────────────────            │
+│ For each page (1 to 700):                                   │
+│   1. Extract page from PDF → original-page-NNN.png          │
+│      (pdftoppm -png -r 300)                                 │
+│   2. Preprocess image → enhanced-page-NNN.png:              │
+│      - Deskew (ImageMagick -deskew 40%)                     │
+│      - Color correct (Sharp .normalize())                   │
+│      - Denoise (Sharp .median(3))                           │
+│      - Crop borders (Sharp .trim())                         │
+│   3. Upload enhanced-page-NNN.png to Google Drive           │
+│   4. Save metadata:                                         │
+│      {                                                      │
+│        driveFileId: "...",                                  │
+│        isPreprocessed: true,                                │
+│        preprocessingApplied: ["deskew", "color", ...]       │
+│      }                                                      │
+│   5. Emit progress: "Preprocessed 350/700 pages"            │
+│                                                              │
+│ PHASE 2B: NO PREPROCESSING (if skipped, ~5 min)             │
+│ ────────────────────────────────────────────────            │
+│ For each page (1 to 700):                                   │
+│   1. Extract page from PDF → page-NNN.png                   │
+│      (pdftoppm -png -r 300)                                 │
+│   2. Upload page-NNN.png to Google Drive (no processing)    │
+│   3. Save metadata:                                         │
+│      {                                                      │
+│        driveFileId: "...",                                  │
+│        isPreprocessed: false                                │
+│      }                                                      │
+│   4. Emit progress: "Extracted 350/700 pages"               │
+│                                                              │
+│ PHASE 3: AI LAYOUT DETECTION (~5-10 min)                    │
+│ ─────────────────────────────────────────                   │
+│ For each page (1 to 700):                                   │
+│   1. Download enhanced-page-NNN.png from Drive              │
+│      (or page-NNN.png if preprocessing was skipped)         │
+│   2. Call Gemini 2.5 Flash API with image:                  │
+│      └─> Get layout + OCR from ENHANCED/ORIGINAL image      │
+│   3. Parse AI response:                                     │
+│      - Extract bounding boxes                               │
+│      - Detect columns, verses, footnotes                    │
+│      - Extract text with confidence scores                  │
+│      - Detect inline footnote references                    │
+│   4. Create page-NNN.json:                                  │
+│      {                                                      │
+│        pageId: "page-001",                                  │
+│        image: {                                             │
+│          driveFileId: "...",        ← Enhanced image ID     │
+│          isPreprocessed: true,                              │
+│          preprocessingApplied: [...]                        │
+│        },                                                   │
+│        currentState: {                                      │
+│          boundingBoxes: [...]                               │
+│        },                                                   │
+│        versionHistory: [{                                   │
+│          version: 1,                                        │
+│          changeType: "ai_generated",                        │
+│          processedFrom: "enhanced-image" | "original-image" │
+│        }]                                                   │
+│      }                                                      │
+│   5. Update boxIndex in metadata.json                       │
+│   6. Commit page-NNN.json to GitHub                         │
+│   7. Append to costs.jsonl:                                 │
+│      {"operation": "layout-detection", cost: 0.00038, ...}  │
+│   8. Update job progress                                    │
+│   9. Emit SSE event → "Processing page 350/700"             │
+│                                                              │
+│ Job complete!                                                │
+└────────────────────────────────────────────────────────────────┘
     ↓
 Frontend shows: "Processing complete! 700 pages analyzed"
 ```
@@ -228,11 +288,16 @@ Frontend shows: "Processing complete! 700 pages analyzed"
 **Storage:**
 - Jobs: In-memory queue (or `jobs/*.json` files if need persistence)
 - Results: GitHub (page-NNN.json files)
-- Images: Google Drive
+- Images in Google Drive:
+  - `original.pdf` (uploaded by user)
+  - `enhanced-page-NNN.png` (preprocessed images for OCR) OR
+  - `page-NNN.png` (original pages if preprocessing skipped)
 - Costs: costs.jsonl (append-only file)
 - No database
 
-**Real-time updates:** SSE stream emits progress events
+**Key insight:** All OCR/layout detection runs on enhanced images (or original if preprocessing skipped), NOT on the original PDF pages directly.
+
+**Real-time updates:** SSE stream emits progress events for all 3 phases
 
 ---
 
