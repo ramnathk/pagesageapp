@@ -36,6 +36,7 @@ Supporting Systems:
 **Purpose**: Organize and manage book digitization projects
 
 **What It Does**:
+
 - Create new projects for each book
 - Store project metadata (title, author, languages, etc.)
 - Track project progress (X of Y pages complete)
@@ -44,6 +45,7 @@ Supporting Systems:
 - Archive completed projects
 
 **Key Entities**:
+
 - **Project**: A single book being digitized
   - Unique ID
   - Book metadata (title, author, publisher, year, languages)
@@ -52,12 +54,14 @@ Supporting Systems:
   - Status (active, complete, archived)
 
 **User Interactions**:
+
 - Create project → Enter metadata → Upload PDF
 - View dashboard → See progress and costs
 - Navigate to pages → Edit annotations
 - Export project → Download markdown
 
 **Dependencies**:
+
 - → PDF Upload (receives uploaded files)
 - → Cost Management (displays costs)
 - → Export Module (generates markdown)
@@ -69,6 +73,7 @@ Supporting Systems:
 **Purpose**: Handle PDF uploads and prepare for processing
 
 **What It Does**:
+
 - Accept PDF file uploads (single book, up to 500MB)
 - Validate PDF (format, size, not corrupted)
 - Scan for malware (security check)
@@ -78,6 +83,7 @@ Supporting Systems:
 - Trigger image preprocessing
 
 **Processing Steps**:
+
 ```
 User uploads PDF
   ↓
@@ -93,6 +99,7 @@ Trigger preprocessing
 ```
 
 **Requirements**:
+
 - Single-file upload (no batch)
 - Support large files (500+ pages, 500MB max)
 - Handle scanned images embedded in PDFs
@@ -100,6 +107,7 @@ Trigger preprocessing
 - Validate before storing
 
 **User Interactions**:
+
 - Drag-and-drop PDF or file picker
 - View upload progress
 - Review extracted metadata
@@ -112,6 +120,7 @@ Trigger preprocessing
 **Purpose**: Prepare page images for optimal OCR results
 
 **What It Does**:
+
 - Process each page image to improve quality:
   - **Deskew**: Straighten tilted scans
   - **Color correction**: Remove yellowing, improve contrast
@@ -122,11 +131,13 @@ Trigger preprocessing
 - Notify when processing complete
 
 **Why It Matters**:
+
 - OCR works better on clean, straight images
 - Better contrast improves text detection
 - Removes distracting background noise
 
 **Processing Flow**:
+
 ```
 For each page:
   Detect skew angle → Rotate to straighten
@@ -141,6 +152,7 @@ For each page:
 ```
 
 **User Interactions**:
+
 - View preprocessing progress (X of Y pages)
 - Preview before/after preprocessing
 - Adjust settings if needed (contrast, crop margins)
@@ -153,6 +165,7 @@ For each page:
 **Purpose**: Automatically detect and classify text regions on each page
 
 **What It Does**:
+
 - Analyze each preprocessed page using cloud AI
 - Detect bounding boxes around text regions
 - Classify each region:
@@ -165,6 +178,7 @@ For each page:
 - Store annotations in repository
 
 **What It Detects**:
+
 - Sanskrit verses (Devanagari, often centered or indented)
 - Hindi commentary (Devanagari, paragraph form)
 - English text (roman script)
@@ -178,6 +192,7 @@ For each page:
 
 **Bounding Box Data**:
 Each detected box includes:
+
 - Coordinates (x, y, width, height)
 - Content type
 - Language
@@ -186,6 +201,7 @@ Each detected box includes:
 - Links to related boxes (if applicable)
 
 **Requirements**:
+
 - Handle multi-column layouts (2-column, 3-column)
 - Distinguish Sanskrit vs Hindi (both use Devanagari)
 - Detect IAST transliteration
@@ -193,6 +209,7 @@ Each detected box includes:
 - High confidence thresholds (> 80%)
 
 **User Interactions**:
+
 - View detection progress
 - Review detected layout in annotation editor
 - Adjust AI-generated boxes if needed
@@ -204,6 +221,7 @@ Each detected box includes:
 **Purpose**: Visual interface for reviewing and correcting layout annotations
 
 **What It Does**:
+
 - Display page image with overlaid bounding boxes
 - **Visual distinction**: AI-generated vs user-edited boxes (different colors/styles)
 - Enable editing operations:
@@ -225,18 +243,21 @@ Each detected box includes:
 - Undo/redo within session
 
 **Version Tracking in Editor**:
+
 - Show edit history panel: "12 versions, last edited 5 min ago"
 - Click box → See its history: "Created by AI → Adjusted by you"
 - Compare versions: Side-by-side before/after
 - Revert to previous version if needed
 
 **Navigation**:
+
 - Previous/next page buttons
 - Jump to page number
 - Thumbnail grid view
 - Filter pages (reviewed, needs attention, low confidence)
 
 **Requirements**:
+
 - Smooth, responsive canvas (< 100ms interaction lag)
 - Clear visual distinction (AI vs user edits)
 - Easy metadata palette (quick label selection)
@@ -245,6 +266,7 @@ Each detected box includes:
 - Unlimited undo/redo
 
 **User Interactions**:
+
 1. Navigate to page
 2. View AI-detected boxes
 3. Select and edit boxes as needed
@@ -259,6 +281,7 @@ Each detected box includes:
 **Purpose**: Extract text from bounding boxes using OCR
 
 **What It Does**:
+
 - Process selected pages/regions
 - Crop image to each bounding box
 - Use appropriate OCR engine based on language:
@@ -271,11 +294,13 @@ Each detected box includes:
 - Preserve special characters (diacritics, combining marks)
 
 **Flexible Timing**:
+
 - Can start OCR before finishing all layout annotations
 - Can OCR specific pages or page ranges
 - Can re-run OCR for specific boxes
 
 **Processing Flow**:
+
 ```
 For each bounding box (in reading order):
   Crop image to box coordinates
@@ -292,11 +317,13 @@ For each bounding box (in reading order):
 ```
 
 **Quality Indicators**:
+
 - Confidence score per box (0-100%)
 - Visual highlighting (red/yellow/green based on confidence)
 - Flag low-confidence text for review
 
 **User Interactions**:
+
 - Select pages to OCR
 - View OCR progress
 - See confidence scores
@@ -309,6 +336,7 @@ For each bounding box (in reading order):
 **Purpose**: Review and correct OCR output
 
 **What It Does**:
+
 - Display OCR text alongside image snippet
 - Enable text editing:
   - Rich text editor (supports Devanagari, IAST, English)
@@ -322,6 +350,7 @@ For each bounding box (in reading order):
 - Preserve original OCR output (never overwritten)
 
 **Version Chain Example**:
+
 ```
 Box-1 Text History:
   Version 1: [AI detected box]
@@ -332,6 +361,7 @@ Box-1 Text History:
 ```
 
 **UI Layout**:
+
 ```
 ┌──────────────────────┬──────────────────────┐
 │  Image Snippet       │  Text Editor         │
@@ -348,6 +378,7 @@ Box-1 Text History:
 ```
 
 **Requirements**:
+
 - Side-by-side image and text
 - Support Devanagari input (on-screen keyboard or transliteration)
 - Support IAST with diacritics
@@ -357,6 +388,7 @@ Box-1 Text History:
 - Batch operations (apply same correction to multiple instances)
 
 **User Interactions**:
+
 - Navigate through boxes
 - Review OCR text vs image
 - Edit text where incorrect
@@ -371,6 +403,7 @@ Box-1 Text History:
 **Purpose**: Generate structured markdown from annotations and text
 
 **What It Does**:
+
 - Compile all pages into single markdown file
 - Apply Quarto-compatible formatting:
   - YAML frontmatter (book metadata)
@@ -390,6 +423,7 @@ Box-1 Text History:
 - Store final output in repository
 
 **Output Format** (Quarto Markdown):
+
 ```markdown
 ---
 title: "Bhagavad Gita"
@@ -425,6 +459,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 ```
 
 **Export Options**:
+
 - Full book or selected chapters
 - Include/exclude low-confidence text
 - Parallel text layouts
@@ -432,6 +467,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 - HTML preview
 
 **User Interactions**:
+
 - Click "Export Project"
 - Configure export options
 - Preview generated markdown
@@ -445,6 +481,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 **Purpose**: Track API usage costs and enforce budgets
 
 **What It Does**:
+
 - **Pre-operation cost estimates**:
   - "Processing 700 pages will cost ~$1.75"
   - Show breakdown (preprocessing, layout, OCR)
@@ -468,6 +505,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
   - Export cost logs
 
 **Budget Workflow**:
+
 ```
 1. Set monthly budget: $100
    ↓
@@ -487,11 +525,13 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 ```
 
 **Budget Override**:
+
 - You can increase budget anytime
 - Requires explicit action
 - Logged for review
 
 **Cost Dashboard**:
+
 ```
 ┌─────────────────────────────────────────┐
 │ Monthly Budget Status                   │
@@ -510,6 +550,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 ```
 
 **User Interactions**:
+
 - View budget status on dashboard
 - Set/adjust monthly budget
 - Review cost history
@@ -525,6 +566,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 **Purpose**: Store all project data with full version history
 
 **What It Does**:
+
 - Create repository for each project
 - Store all files:
   - Project metadata (JSON)
@@ -537,6 +579,7 @@ The word 'dharma-kshetra' (field of dharma) indicates...
 - Enable rollback to any previous state
 
 **Repository Structure**:
+
 ```
 book-{id}-{slug}/
   metadata.json              # Project metadata
@@ -556,18 +599,21 @@ book-{id}-{slug}/
 
 **Version History Per Page**:
 Each `page-NNN.json` contains:
+
 - Current state (latest bounding boxes, text)
 - Full version history (all edits, timestamps, notes)
 - Attribution (who made each change)
 - Git commit SHAs (links to repository commits)
 
 **Git Integration**:
+
 - Every save creates git commit
 - Commit messages include change summary
 - Full git history available
 - Can use git commands to review history
 
 **Why Plain Text Storage**:
+
 - Human-readable (can open JSON files directly)
 - Git-friendly (meaningful diffs)
 - Version control works naturally
@@ -580,6 +626,7 @@ Each `page-NNN.json` contains:
 **Purpose**: Keep you informed of important events
 
 **What It Does**:
+
 - Display in-app notifications
 - Alert on:
   - **Processing complete**: "Page preprocessing finished (700 pages)"
@@ -596,6 +643,7 @@ Each `page-NNN.json` contains:
 - Notification history
 
 **Notification Panel**:
+
 ```
 ┌────────────────────────────────────────┐
 │ Notifications                     [×]  │
@@ -618,6 +666,7 @@ Each `page-NNN.json` contains:
 **Purpose**: Manage long-running processing tasks
 
 **What It Does**:
+
 - Queue processing jobs:
   - Image preprocessing (per page)
   - Layout detection (per page)
@@ -639,6 +688,7 @@ Each `page-NNN.json` contains:
   - Estimate completion time
 
 **Job Status UI**:
+
 ```
 ┌────────────────────────────────────────┐
 │ Background Jobs                        │
@@ -726,12 +776,14 @@ RESULT: Fully digitized book with complete version history
 ## Version Tracking: The Core Feature
 
 **Why It's Critical**:
+
 - Working with historical texts requires absolute accuracy
 - Every correction must be attributable and reviewable
 - Scholarly work needs provenance (who said what, when)
 - Mistakes can be caught and fixed retroactively
 
 **What Gets Tracked**:
+
 1. **AI-generated layout** (version 1):
    - Bounding box coordinates
    - Content type classifications
@@ -759,6 +811,7 @@ RESULT: Fully digitized book with complete version history
    - Timestamp
 
 **Version History UI**:
+
 - **Timeline view**: Chronological list of all versions
 - **Diff view**: Side-by-side comparison of any two versions
 - **Attribution**: "Created by AI, adjusted by You on Jan 15"
@@ -767,6 +820,7 @@ RESULT: Fully digitized book with complete version history
 - **Export**: Download full edit history as report
 
 **Git Integration**:
+
 - Each version has corresponding git commit
 - Commit messages include change summary
 - Can use standard git tools (log, diff, show)
@@ -825,6 +879,7 @@ Export & Publishing
 ```
 
 **Supporting all modules**:
+
 - Version Control & Storage (every module stores data)
 - Cost Management (tracks OCR and AI operations)
 - Notification System (all modules can notify)
@@ -836,6 +891,7 @@ Export & Publishing
 **v2: Multi-User Collaboration**
 
 Additional modules:
+
 - User Management (authentication, roles)
 - Collaboration Workflows (concurrent editing, conflicts)
 - Admin Dashboard (monitor multiple users)
@@ -849,6 +905,7 @@ See **REQUIREMENTS-v2.md** for details.
 ## Summary
 
 **v1 Core Modules** (9):
+
 1. Project Management
 2. PDF Upload & Processing
 3. Image Preprocessing
@@ -860,6 +917,7 @@ See **REQUIREMENTS-v2.md** for details.
 9. Cost Management
 
 **v1 Infrastructure** (3):
+
 - Version Control & Storage
 - Notification System
 - Background Job Queue

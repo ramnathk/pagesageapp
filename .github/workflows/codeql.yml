@@ -1,0 +1,68 @@
+# Separate CodeQL workflow for better visibility and control
+# This runs independently of the main security workflow
+
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Run every Monday at 3am UTC
+    - cron: "0 3 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze Code with CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write # Required for CodeQL results
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript-typescript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # Use extended security queries (more comprehensive)
+          queries: security-extended,security-and-quality
+          # Custom query packs (optional)
+          # packs: codeql/javascript-queries:experimental-security
+
+      # Autobuild attempts to build any compiled languages (TypeScript → JavaScript)
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      # If autobuild fails, you can specify build steps manually:
+      # - name: Build
+      #   run: |
+      #     npm ci
+      #     npm run build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+          # Upload results to GitHub Security tab
+          upload: true
+          # Fail workflow if high-severity issues found
+          # checkout-path: ${{ github.workspace }}
+
+      # Optional: Generate SARIF report for review
+      - name: Upload CodeQL results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-results
+          path: ${{ github.workspace }}/results
+          retention-days: 30

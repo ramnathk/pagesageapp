@@ -28,6 +28,7 @@ chmod +x scripts/setup-test.sh
 ```
 
 This will:
+
 - Install dependencies (`@google/generative-ai`, `tsx`)
 - Create `test-samples/` directory
 - Extract test pages from your sample PDFs
@@ -36,11 +37,13 @@ This will:
 ### 4. Run Test
 
 Test with complex multi-column layout (page 8 from Kalika):
+
 ```bash
 npx tsx scripts/test-gemini-layout.ts test-samples/kalika-page-8.png
 ```
 
 Or test with simpler layout (page 5 from Mahanirvana):
+
 ```bash
 npx tsx scripts/test-gemini-layout.ts test-samples/mahanirvana-page-5.png
 ```
@@ -50,9 +53,11 @@ npx tsx scripts/test-gemini-layout.ts test-samples/mahanirvana-page-5.png
 ## What the Test Does
 
 ### Test 1: Bounding Box Detection ✅/❌
+
 **Question:** Can Gemini return pixel-precise bounding boxes?
 
 **Success criteria:**
+
 - ✅ Returns JSON with `boundingBox: {x, y, width, height}`
 - ✅ Coordinates are in pixels
 - ✅ All text blocks detected
@@ -63,9 +68,11 @@ npx tsx scripts/test-gemini-layout.ts test-samples/mahanirvana-page-5.png
 ---
 
 ### Test 2: Multi-Column Detection ✅/❌
+
 **Question:** Can Gemini detect columns and reading order?
 
 **Success criteria:**
+
 - ✅ Detects number of columns (1, 2, or 3+)
 - ✅ Provides column boundaries
 - ✅ Determines correct reading order
@@ -76,9 +83,11 @@ npx tsx scripts/test-gemini-layout.ts test-samples/mahanirvana-page-5.png
 ---
 
 ### Test 3: Language Detection ✅/❌
+
 **Question:** Can Gemini handle Devanagari/Sanskrit/IAST?
 
 **Success criteria:**
+
 - ✅ Detects Devanagari script
 - ✅ Identifies Sanskrit vs Hindi
 - ✅ Distinguishes IAST transliteration
@@ -161,6 +170,7 @@ with some English translations. I can see approximately
 **Architecture:** Continue with Gemini 2.5 Flash
 **Cost:** $0.27 per 700-page book (or FREE on free tier)
 **Next Steps:**
+
 1. ✅ Mark ADR 002 as "APPROVED - Gemini 2.5 Flash"
 2. Implement preprocessing pipeline (already documented)
 3. Implement Gemini API integration
@@ -173,12 +183,14 @@ with some English translations. I can see approximately
 **Architecture:** Switch to Document AI Layout Parser
 **Cost:** $7.00 per 700-page book
 **Next Steps:**
+
 1. ❌ Update ADR 002 to "REJECTED - Gemini / APPROVED - Document AI"
 2. Update architecture-overview.md (minimal changes)
 3. Implement Document AI integration (different SDK)
 4. Accept higher cost but guaranteed quality
 
 **Trade-off:** 26x more expensive but:
+
 - ✅ Proven for complex layouts
 - ✅ Purpose-built for documents
 - ✅ Reliable bounding boxes
@@ -192,17 +204,20 @@ with some English translations. I can see approximately
 Some features work, some don't. Options:
 
 **Option A: Hybrid approach**
+
 - Use Gemini for simple pages
 - Use Document AI for complex pages
 - Auto-detect complexity per page
 - Blended cost: ~$2-4 per book
 
 **Option B: Gemini + Custom Processing**
+
 - Use Gemini for OCR only
 - Custom algorithm for bounding boxes (OpenCV)
 - More development work, but low cost
 
 **Option C: Claude Sonnet 4.5**
+
 - Better semantic understanding
 - Cost: ~$3 per book
 - May still need custom bounding box detection
@@ -214,12 +229,14 @@ Some features work, some don't. Options:
 Based on my analysis:
 
 **Gemini 2.5 Flash likely CAN:**
+
 - ✅ Extract text (OCR)
 - ✅ Identify language/script
 - ✅ Describe layout in natural language
 - ✅ Return JSON with structured prompting
 
 **Gemini 2.5 Flash might NOT:**
+
 - ⚠️ Provide pixel-perfect bounding boxes
 - ⚠️ Return coordinates without heavy prompting
 - ⚠️ Handle complex multi-column layouts perfectly
@@ -247,11 +264,13 @@ test-samples/
 ## Troubleshooting
 
 ### "GOOGLE_AI_API_KEY not set"
+
 ```bash
 export GOOGLE_AI_API_KEY='AIzaSyBx...'
 ```
 
 ### "pdftoppm: command not found"
+
 ```bash
 # macOS
 brew install poppler
@@ -261,12 +280,15 @@ sudo apt-get install poppler-utils
 ```
 
 ### "Module '@google/generative-ai' not found"
+
 ```bash
 npm install @google/generative-ai
 ```
 
 ### "TypeError: Cannot read property 'blocks' of undefined"
+
 The API response wasn't in the expected format. Check:
+
 - Is the API key valid?
 - Is the image file readable?
 - Review the raw response in the error output
@@ -276,11 +298,13 @@ The API response wasn't in the expected format. Check:
 ## Cost of Testing
 
 **FREE tier limits:**
+
 - 15 requests per minute
 - 1,500 requests per day
 - No credit card required
 
 **This test makes:**
+
 - 3 API calls per test image
 - ~6 total calls if testing both samples
 
@@ -291,6 +315,7 @@ The API response wasn't in the expected format. Check:
 ## Questions?
 
 If test results are unclear:
+
 1. Share the `gemini-test-summary.json` file
 2. Share the `*-gemini-result.json` files
 3. I'll help interpret the results

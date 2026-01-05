@@ -3,7 +3,9 @@
 You are helping scaffold TypeScript types and interfaces for PageSage's core data structures.
 
 ## Project Context
+
 PageSage handles:
+
 - **OCR Results**: Text, coordinates, confidence scores
 - **Annotations**: Bounding boxes, user edits, attribution
 - **Documents**: Multi-page books, metadata, version history
@@ -30,32 +32,32 @@ PageSage handles:
  */
 export interface TypeName {
   // Required fields first
-  id: string
-  createdAt: Date
+  id: string;
+  createdAt: Date;
 
   // Optional fields after
-  updatedAt?: Date
+  updatedAt?: Date;
 
   // Complex nested types
   metadata: {
-    key: string
-    value: unknown
-  }
+    key: string;
+    value: unknown;
+  };
 }
 
 // Type guards for runtime validation
 export function isTypeName(value: unknown): value is TypeName {
   return (
-    typeof value === 'object' &&
+    typeof value === "object" &&
     value !== null &&
-    'id' in value &&
-    typeof value.id === 'string'
-  )
+    "id" in value &&
+    typeof value.id === "string"
+  );
 }
 
 // Utility types
-export type CreateTypeNameInput = Omit<TypeName, 'id' | 'createdAt'>
-export type UpdateTypeNameInput = Partial<CreateTypeNameInput>
+export type CreateTypeNameInput = Omit<TypeName, "id" | "createdAt">;
+export type UpdateTypeNameInput = Partial<CreateTypeNameInput>;
 ```
 
 4. **PageSage-specific conventions**:
@@ -79,40 +81,43 @@ export type UpdateTypeNameInput = Partial<CreateTypeNameInput>
 ## Example Domains
 
 ### OCR Types
+
 ```typescript
 export interface OCRResult {
-  text: string
-  confidence: number // 0-1
-  boundingBox: BoundingBox
-  language: Language
-  detectedScript?: 'devanagari' | 'latin'
+  text: string;
+  confidence: number; // 0-1
+  boundingBox: BoundingBox;
+  language: Language;
+  detectedScript?: "devanagari" | "latin";
 }
 
 export interface BoundingBox {
-  x: number // 0-1 normalized
-  y: number
-  width: number
-  height: number
+  x: number; // 0-1 normalized
+  y: number;
+  width: number;
+  height: number;
 }
 ```
 
 ### Annotation Types
+
 ```typescript
 export interface Annotation {
-  id: string
-  pageId: string
-  type: 'text' | 'heading' | 'verse' | 'commentary'
-  originalText: string // OCR output
-  editedText?: string // User correction
-  boundingBox: BoundingBox
-  attribution: Attribution[]
-  confidence: number
-  createdAt: Date
-  updatedAt?: Date
+  id: string;
+  pageId: string;
+  type: "text" | "heading" | "verse" | "commentary";
+  originalText: string; // OCR output
+  editedText?: string; // User correction
+  boundingBox: BoundingBox;
+  attribution: Attribution[];
+  confidence: number;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 ```
 
 ## Output
+
 - Create type file in `/src/lib/types/`
 - Export from `/src/lib/types/index.ts`
 - Generate corresponding test file with factories

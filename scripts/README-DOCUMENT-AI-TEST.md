@@ -17,11 +17,13 @@ This test evaluates Google Document AI as an alternative to Gemini 2.5 Flash for
 ### 1. Google Cloud Project Setup
 
 1. **Create or select a Google Cloud project**
+
    ```bash
    # Visit: https://console.cloud.google.com/
    ```
 
 2. **Enable the Document AI API**
+
    ```bash
    # Visit: https://console.cloud.google.com/apis/library/documentai.googleapis.com
    # Click "ENABLE"
@@ -35,6 +37,7 @@ This test evaluates Google Document AI as an alternative to Gemini 2.5 Flash for
 ### 2. Service Account Setup
 
 1. **Create a service account**
+
    ```bash
    # Visit: https://console.cloud.google.com/iam-admin/serviceaccounts
    # Click "CREATE SERVICE ACCOUNT"
@@ -58,6 +61,7 @@ This test evaluates Google Document AI as an alternative to Gemini 2.5 Flash for
 ### 3. Create OCR Processor
 
 1. **Visit Document AI Processors page**
+
    ```bash
    # URL: https://console.cloud.google.com/ai/document-ai/processors
    ```
@@ -95,6 +99,7 @@ chmod +x scripts/setup-document-ai-test.sh
 ```
 
 This will:
+
 - ✅ Check Node.js and npm
 - ✅ Install `@google-cloud/documentai` package
 - ✅ Verify authentication
@@ -168,9 +173,11 @@ ocrConfig: {
 ## Output Files
 
 ### 1. JSON Result File
+
 **Location**: `test-samples/<image-name>-documentai-result.json`
 
 **Contents**:
+
 ```json
 {
   "processor": "Document AI Enterprise OCR",
@@ -202,9 +209,11 @@ ocrConfig: {
 ```
 
 ### 2. Annotated Image
+
 **Location**: `test-samples/<image-name>-documentai-annotated.png`
 
 **Features**:
+
 - Bounding boxes overlaid on original image
 - Color-coded by overlap count:
   - 🟢 Green = No overlaps
@@ -228,26 +237,26 @@ Document AI is expected to perform significantly better on all these criteria.
 
 ### Feature Comparison
 
-| Feature | Document AI Enterprise OCR | Gemini 2.5 Flash | Winner |
-|---------|---------------------------|------------------|--------|
-| **Coordinate System** | ✅ Actual pixels, no scaling | ❌ Downscaled 2.2× (846px vs 1867px) | 🏆 Document AI |
-| **Bounding Box Accuracy** | ✅ _To be tested_ | ❌ Width 2× too wide, crosses columns | 🏆 Document AI (expected) |
-| **Devanagari/Sanskrit** | ✅ Native Hindi/Sanskrit support | ❌ Character errors, hallucinations | 🏆 Document AI (expected) |
-| **Text Extraction** | ✅ _To be tested_ | ⚠️ Good for English, poor for Devanagari | 🏆 Document AI (expected) |
-| **Layout Hierarchy** | ✅ 4 levels (block→para→line→token) | ❌ Flat blocks only | 🏆 Document AI |
-| **Confidence Scores** | ✅ Per element at all levels | ⚠️ Per block only | 🏆 Document AI |
-| **Image Quality** | ✅ 8-dimension quality assessment | ❌ Not provided | 🏆 Document AI |
-| **Content Coverage** | ✅ _To be tested_ | ❌ 30-40% blocks missing | 🏆 Document AI (expected) |
-| **Language Detection** | ✅ With confidence percentages | ✅ Basic detection | 🏆 Document AI |
-| **Cost (700-page book)** | ⚠️ ~$0.30-7.00 (depends on free tier) | ✅ $0.27 | 🏆 Gemini |
-| **Speed** | ⚠️ _To be tested_ | ✅ Fast (~2-5 seconds) | 🏆 Gemini (expected) |
+| Feature                   | Document AI Enterprise OCR            | Gemini 2.5 Flash                         | Winner                    |
+| ------------------------- | ------------------------------------- | ---------------------------------------- | ------------------------- |
+| **Coordinate System**     | ✅ Actual pixels, no scaling          | ❌ Downscaled 2.2× (846px vs 1867px)     | 🏆 Document AI            |
+| **Bounding Box Accuracy** | ✅ _To be tested_                     | ❌ Width 2× too wide, crosses columns    | 🏆 Document AI (expected) |
+| **Devanagari/Sanskrit**   | ✅ Native Hindi/Sanskrit support      | ❌ Character errors, hallucinations      | 🏆 Document AI (expected) |
+| **Text Extraction**       | ✅ _To be tested_                     | ⚠️ Good for English, poor for Devanagari | 🏆 Document AI (expected) |
+| **Layout Hierarchy**      | ✅ 4 levels (block→para→line→token)   | ❌ Flat blocks only                      | 🏆 Document AI            |
+| **Confidence Scores**     | ✅ Per element at all levels          | ⚠️ Per block only                        | 🏆 Document AI            |
+| **Image Quality**         | ✅ 8-dimension quality assessment     | ❌ Not provided                          | 🏆 Document AI            |
+| **Content Coverage**      | ✅ _To be tested_                     | ❌ 30-40% blocks missing                 | 🏆 Document AI (expected) |
+| **Language Detection**    | ✅ With confidence percentages        | ✅ Basic detection                       | 🏆 Document AI            |
+| **Cost (700-page book)**  | ⚠️ ~$0.30-7.00 (depends on free tier) | ✅ $0.27                                 | 🏆 Gemini                 |
+| **Speed**                 | ⚠️ _To be tested_                     | ✅ Fast (~2-5 seconds)                   | 🏆 Gemini (expected)      |
 
 ### Cost Analysis
 
-| Scenario | Document AI | Gemini 2.5 Flash | Notes |
-|----------|-------------|------------------|-------|
-| **Single 700-page book** | $0.30 | $0.27 | Gemini cheaper |
-| **Annual (50 books)** | $43.50 | $13.50 | Gemini cheaper |
+| Scenario                   | Document AI      | Gemini 2.5 Flash  | Notes                                          |
+| -------------------------- | ---------------- | ----------------- | ---------------------------------------------- |
+| **Single 700-page book**   | $0.30            | $0.27             | Gemini cheaper                                 |
+| **Annual (50 books)**      | $43.50           | $13.50            | Gemini cheaper                                 |
 | **With manual correction** | $43.50 + 0 hours | $13.50 + 50 hours | Document AI cheaper if Gemini needs correction |
 
 **Key Insight**: Gemini's cost advantage disappears if manual correction takes more than 1 hour per book.
@@ -321,6 +330,7 @@ Error: 7 PERMISSION_DENIED: Permission 'documentai.processors.processDocument' d
 ```
 
 **Solutions**:
+
 1. Check service account has `roles/documentai.editor` role
 2. Verify `GOOGLE_APPLICATION_CREDENTIALS` points to correct key file
 3. Ensure Document AI API is enabled in your project
@@ -332,6 +342,7 @@ Error: 5 NOT_FOUND: Processor not found
 ```
 
 **Solutions**:
+
 1. Verify `DOCUMENT_AI_PROCESSOR_ID` is correct
 2. Check processor exists in specified location (`us` or `eu`)
 3. Ensure `DOCUMENT_AI_LOCATION` matches processor location
@@ -343,6 +354,7 @@ Error: 8 RESOURCE_EXHAUSTED: Quota exceeded
 ```
 
 **Solutions**:
+
 1. Check quotas: https://console.cloud.google.com/iam-admin/quotas
 2. Request quota increase if needed
 3. Use batch processing for large volumes
@@ -355,6 +367,7 @@ Error: 3 INVALID_ARGUMENT: Document size exceeds 20MB limit
 ```
 
 **Solutions**:
+
 1. Compress image before processing
 2. Reduce DPI (300 DPI is usually sufficient for OCR)
 3. Split multi-page PDFs into smaller batches
@@ -370,11 +383,13 @@ Error: 3 INVALID_ARGUMENT: Document size exceeds 20MB limit
 ### PageSage Project Estimate
 
 **700-page book**:
+
 - Pages 1-500: $0 (free tier)
 - Pages 501-700: 200 pages × ($1.50 / 1000) = $0.30
 - **Total per book**: ~$0.30 (within free tier limits)
 
 **Annual cost (50 books)**:
+
 - 50 books × 700 pages = 35,000 pages
 - First 6,000 pages: $0 (500/month × 12 months free)
 - Remaining 29,000 pages: 29 × $1.50 = $43.50

@@ -3,6 +3,7 @@
 You are calculating estimated costs for PageSage operations to help manage the API budget.
 
 ## Cost Management Philosophy (from CLAUDE.md)
+
 - Track all API calls with costs
 - Display estimated costs BEFORE processing ("This will cost ~$1.05")
 - Budget awareness - check before queuing expensive operations
@@ -26,15 +27,18 @@ You are calculating estimated costs for PageSage operations to help manage the A
 3. **Calculate costs** based on pricing:
 
 ### Google Document AI Pricing (as of 2024)
+
 - **Document OCR API**: $1.50 per 1,000 pages
 - **Form Parser**: $65 per 1,000 pages (if needed for layout)
 - **Specialized processors**: $85-$110 per 1,000 pages
 
 ### Gemini API Pricing (if used for enhancement)
+
 - **Gemini 1.5 Flash**: $0.075 per 1M input tokens, $0.30 per 1M output tokens
 - **Gemini 1.5 Pro**: $1.25 per 1M input tokens, $5.00 per 1M output tokens
 
 ### GitHub API
+
 - Free for authenticated requests (5,000 req/hour)
 - Storage: Free for public repos, $0.008/GB/month for private
 
@@ -89,6 +93,7 @@ Proceed? [y/N]
 ## Cost Optimization Strategies
 
 ### For OCR Processing
+
 ```
 Strategy 1: Basic OCR only
   - Skip layout detection
@@ -110,6 +115,7 @@ Strategy 3: Progressive enhancement
 ```
 
 ### For Storage
+
 - Use public GitHub repos (free)
 - Compress JSON exports with gzip
 - Store only essential data (text + coordinates)

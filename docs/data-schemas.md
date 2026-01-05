@@ -10,12 +10,14 @@ This document defines all data structures used in PageSage v1, including JSON sc
 ## Overview
 
 PageSage uses plain-text JSON formats for all structured data to ensure:
+
 - Git-friendly diffs
 - Human readability
 - Version control compatibility
 - Cross-platform portability
 
 **Storage Locations:**
+
 - **GitHub repositories**: Annotations, metadata, version history, cost logs
 - **Google Drive**: Images (PDFs, page images)
 
@@ -46,63 +48,63 @@ PageSage uses plain-text JSON formats for all structured data to ensure:
 ```typescript
 interface ProjectMetadata {
   // Core Identity
-  projectId: string;           // Unique ID (e.g., "proj_abc123")
-  slug: string;                // URL-friendly name (e.g., "bhagavad-gita")
+  projectId: string; // Unique ID (e.g., "proj_abc123")
+  slug: string; // URL-friendly name (e.g., "bhagavad-gita")
 
   // Book Information
-  title: string;               // Book title
-  subtitle?: string;           // Optional subtitle
-  authors: string[];           // List of authors
-  publisher?: string;          // Publisher name
-  publicationYear?: number;    // Year of publication
-  edition?: string;            // Edition (e.g., "2nd Edition")
-  languages: Language[];       // Primary languages in book
-  category?: string;           // Category (e.g., "Vedic Literature")
+  title: string; // Book title
+  subtitle?: string; // Optional subtitle
+  authors: string[]; // List of authors
+  publisher?: string; // Publisher name
+  publicationYear?: number; // Year of publication
+  edition?: string; // Edition (e.g., "2nd Edition")
+  languages: Language[]; // Primary languages in book
+  category?: string; // Category (e.g., "Vedic Literature")
 
   // Source Document
   sourceDocument: {
-    driveFileId: string;       // Google Drive ID for original PDF
-    fileName: string;          // Original filename
-    fileSizeBytes: number;     // File size
-    sha256: string;            // Checksum for integrity
-    uploadedAt: string;        // ISO 8601 timestamp
+    driveFileId: string; // Google Drive ID for original PDF
+    fileName: string; // Original filename
+    fileSizeBytes: number; // File size
+    sha256: string; // Checksum for integrity
+    uploadedAt: string; // ISO 8601 timestamp
   };
 
   // Processing Status
-  status: ProjectStatus;       // Current project state
+  status: ProjectStatus; // Current project state
   pages: {
-    total: number;             // Total page count
-    processed: number;         // Completed preprocessing
-    annotated: number;         // Layout annotations complete
-    reviewed: number;          // Human review complete
-    ocred: number;             // OCR complete
-    corrected: number;         // Text corrections complete
+    total: number; // Total page count
+    processed: number; // Completed preprocessing
+    annotated: number; // Layout annotations complete
+    reviewed: number; // Human review complete
+    ocred: number; // OCR complete
+    corrected: number; // Text corrections complete
   };
 
   // Version Control
-  repositoryUrl: string;       // GitHub repo URL
-  createdAt: string;           // ISO 8601 timestamp
-  updatedAt: string;           // ISO 8601 timestamp
-  createdBy: UserAttribution;  // Who created project
+  repositoryUrl: string; // GitHub repo URL
+  createdAt: string; // ISO 8601 timestamp
+  updatedAt: string; // ISO 8601 timestamp
+  createdBy: UserAttribution; // Who created project
 
   // Cost Tracking
   costs: {
-    totalSpent: number;        // Total USD spent on this project
+    totalSpent: number; // Total USD spent on this project
     breakdown: {
       preprocessing: number;
       layoutDetection: number;
       ocr: number;
       other: number;
     };
-    lastUpdated: string;       // ISO 8601 timestamp
+    lastUpdated: string; // ISO 8601 timestamp
   };
 
   // Export History
-  exports: ExportRecord[];     // List of generated exports
+  exports: ExportRecord[]; // List of generated exports
 
   // Settings
   settings: {
-    autoSaveInterval: number;  // Seconds (default: 30)
+    autoSaveInterval: number; // Seconds (default: 30)
     ocrConfidenceThreshold: number; // 0-1 (default: 0.8)
     defaultExportFormat: ExportFormat;
   };
@@ -112,52 +114,44 @@ interface ProjectMetadata {
     [boxId: string]: {
       pageId: string;
       pageNumber: number;
-      contentType: ContentType;  // For quick filtering
+      contentType: ContentType; // For quick filtering
     };
   };
 }
 
 type ProjectStatus =
-  | 'created'           // Initial state
-  | 'uploading'         // PDF upload in progress
-  | 'preprocessing'     // Image processing
-  | 'detecting-layout'  // AI layout detection
-  | 'annotating'        // Manual annotation review
-  | 'ocr-processing'    // OCR extraction
-  | 'correcting'        // Text correction
-  | 'ready-to-export'   // All processing complete
-  | 'exported'          // Export generated
-  | 'archived';         // Project archived
+  | "created" // Initial state
+  | "uploading" // PDF upload in progress
+  | "preprocessing" // Image processing
+  | "detecting-layout" // AI layout detection
+  | "annotating" // Manual annotation review
+  | "ocr-processing" // OCR extraction
+  | "correcting" // Text correction
+  | "ready-to-export" // All processing complete
+  | "exported" // Export generated
+  | "archived"; // Project archived
 
-type Language =
-  | 'sanskrit'
-  | 'hindi'
-  | 'english'
-  | 'iast';  // IAST transliteration
+type Language = "sanskrit" | "hindi" | "english" | "iast"; // IAST transliteration
 
 interface UserAttribution {
-  name: string;                // Display name
-  githubUsername: string;      // GitHub username
-  githubId: number;            // GitHub user ID
-  avatarUrl?: string;          // Profile picture URL
+  name: string; // Display name
+  githubUsername: string; // GitHub username
+  githubId: number; // GitHub user ID
+  avatarUrl?: string; // Profile picture URL
 }
 
 interface ExportRecord {
   exportId: string;
   format: ExportFormat;
-  generatedAt: string;         // ISO 8601 timestamp
-  filePath: string;            // Path in repository
-  fileSize: number;            // Bytes
-  sha256: string;              // Checksum
-  includedPages: number[];     // Which pages exported
+  generatedAt: string; // ISO 8601 timestamp
+  filePath: string; // Path in repository
+  fileSize: number; // Bytes
+  sha256: string; // Checksum
+  includedPages: number[]; // Which pages exported
   settings: ExportConfiguration;
 }
 
-type ExportFormat =
-  | 'markdown-quarto'
-  | 'hocr'
-  | 'plain-text'
-  | 'json';
+type ExportFormat = "markdown-quarto" | "hocr" | "plain-text" | "json";
 ```
 
 ### Example
@@ -202,10 +196,10 @@ type ExportFormat =
   "costs": {
     "totalSpent": 3.45,
     "breakdown": {
-      "preprocessing": 0.70,
-      "layoutDetection": 1.40,
+      "preprocessing": 0.7,
+      "layoutDetection": 1.4,
       "ocr": 1.35,
-      "other": 0.00
+      "other": 0.0
     },
     "lastUpdated": "2025-01-20T15:30:00Z"
   },
@@ -231,44 +225,44 @@ type ExportFormat =
 ```typescript
 interface UserProfile {
   // Identity
-  userId: string;              // Internal user ID (e.g., "user_abc123")
-  githubId: number;            // GitHub user ID
-  githubUsername: string;      // GitHub username
-  name: string;                // Display name
-  email: string;               // Primary email
-  avatarUrl?: string;          // Profile picture URL
+  userId: string; // Internal user ID (e.g., "user_abc123")
+  githubId: number; // GitHub user ID
+  githubUsername: string; // GitHub username
+  name: string; // Display name
+  email: string; // Primary email
+  avatarUrl?: string; // Profile picture URL
 
   // Role & Permissions (v1: always admin)
-  role: UserRole;              // v1: only 'admin'
-  isAdmin: boolean;            // v1: always true
+  role: UserRole; // v1: only 'admin'
+  isAdmin: boolean; // v1: always true
 
   // Session
-  sessionToken: string;        // Secure session token (httpOnly cookie)
-  sessionCreatedAt: string;    // ISO 8601 timestamp
-  sessionExpiresAt: string;    // ISO 8601 timestamp (7 days)
-  lastActivityAt: string;      // ISO 8601 timestamp
+  sessionToken: string; // Secure session token (httpOnly cookie)
+  sessionCreatedAt: string; // ISO 8601 timestamp
+  sessionExpiresAt: string; // ISO 8601 timestamp (7 days)
+  lastActivityAt: string; // ISO 8601 timestamp
 
   // OAuth
-  githubAccessToken?: string;  // GitHub OAuth token (encrypted)
-  githubScopes: string[];      // Granted OAuth scopes
+  githubAccessToken?: string; // GitHub OAuth token (encrypted)
+  githubScopes: string[]; // Granted OAuth scopes
 
   // Preferences
   preferences: {
-    theme: 'light' | 'dark';
-    timezone: string;          // IANA timezone (e.g., "America/New_York")
-    dateFormat: string;        // Preferred date format
+    theme: "light" | "dark";
+    timezone: string; // IANA timezone (e.g., "America/New_York")
+    dateFormat: string; // Preferred date format
   };
 
   // Metadata
-  createdAt: string;           // ISO 8601 timestamp (first login)
-  updatedAt: string;           // ISO 8601 timestamp
+  createdAt: string; // ISO 8601 timestamp (first login)
+  updatedAt: string; // ISO 8601 timestamp
 }
 
 type UserRole =
-  | 'admin'      // v1: Full access
-  | 'editor'     // v4: Can edit annotations
-  | 'reviewer'   // v4: Can review/approve
-  | 'viewer';    // v4: Read-only
+  | "admin" // v1: Full access
+  | "editor" // v4: Can edit annotations
+  | "reviewer" // v4: Can review/approve
+  | "viewer"; // v4: Read-only
 
 interface UserSession {
   sessionId: string;
@@ -320,9 +314,9 @@ interface UserSession {
 ```typescript
 interface PageAnnotations {
   // Page Identity
-  pageId: string;              // Unique ID (e.g., "page-001")
-  pageNumber: number;          // 1-based page number
-  projectId: string;           // Parent project ID
+  pageId: string; // Unique ID (e.g., "page-001")
+  pageNumber: number; // 1-based page number
+  projectId: string; // Parent project ID
 
   // Image Reference (Google Drive)
   image: ImageMetadata;
@@ -332,8 +326,8 @@ interface PageAnnotations {
     boundingBoxes: BoundingBox[];
     reviewStatus: ReviewStatus;
     ocrStatus: OcrStatus;
-    confidence: number;        // Overall confidence (0-1)
-    lastModifiedAt: string;    // ISO 8601 timestamp
+    confidence: number; // Overall confidence (0-1)
+    lastModifiedAt: string; // ISO 8601 timestamp
     lastModifiedBy: UserAttribution;
   };
 
@@ -341,24 +335,24 @@ interface PageAnnotations {
   versionHistory: VersionHistoryEntry[];
 
   // Metadata
-  createdAt: string;           // ISO 8601 timestamp
-  updatedAt: string;           // ISO 8601 timestamp
+  createdAt: string; // ISO 8601 timestamp
+  updatedAt: string; // ISO 8601 timestamp
 }
 
 type ReviewStatus =
-  | 'pending'       // Not yet reviewed
-  | 'in-progress'   // Currently being reviewed
-  | 'reviewed'      // Human review complete
-  | 'needs-rework'  // Issues found, needs re-review
-  | 'approved';     // Final approval
+  | "pending" // Not yet reviewed
+  | "in-progress" // Currently being reviewed
+  | "reviewed" // Human review complete
+  | "needs-rework" // Issues found, needs re-review
+  | "approved"; // Final approval
 
 type OcrStatus =
-  | 'not-started'
-  | 'queued'
-  | 'processing'
-  | 'completed'
-  | 'failed'
-  | 'correcting';  // Text correction in progress
+  | "not-started"
+  | "queued"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "correcting"; // Text correction in progress
 ```
 
 ### Example (with Multiple Inline Footnotes)
@@ -426,12 +420,16 @@ type OcrStatus =
           "ocr": "This verse appears in the Mahābhārata and has been interpreted by multiple scholars.",
           "corrected": "This verse appears in the Mahābhārata and has been interpreted by multiple scholars."
         },
-        "linkedBoxes": ["box-footnote-001", "box-footnote-002", "box-footnote-003"],
+        "linkedBoxes": [
+          "box-footnote-001",
+          "box-footnote-002",
+          "box-footnote-003"
+        ],
         "inlineReferences": [
           {
             "referenceId": "ref-001",
             "type": "footnote",
-            "position": {"charOffset": 24, "length": 1},
+            "position": { "charOffset": 24, "length": 1 },
             "targetBoxId": "box-footnote-001",
             "displayText": "¹",
             "sequenceInText": 1
@@ -439,7 +437,7 @@ type OcrStatus =
           {
             "referenceId": "ref-002",
             "type": "footnote",
-            "position": {"charOffset": 38, "length": 1},
+            "position": { "charOffset": 38, "length": 1 },
             "targetBoxId": "box-footnote-002",
             "displayText": "²",
             "sequenceInText": 2
@@ -447,7 +445,7 @@ type OcrStatus =
           {
             "referenceId": "ref-003",
             "type": "footnote",
-            "position": {"charOffset": 84, "length": 1},
+            "position": { "charOffset": 84, "length": 1 },
             "targetBoxId": "box-footnote-003",
             "displayText": "³",
             "sequenceInText": 3
@@ -503,8 +501,8 @@ type OcrStatus =
       "changes": {
         "action": "moved",
         "boxId": "box-001",
-        "before": {"x": 100, "y": 200},
-        "after": {"x": 105, "y": 198}
+        "before": { "x": 100, "y": 200 },
+        "after": { "x": 105, "y": 198 }
       },
       "commitSha": "def456ghi789",
       "note": "Adjusted box to better fit verse text"
@@ -526,85 +524,85 @@ type OcrStatus =
 ```typescript
 interface BoundingBox {
   // Identity
-  boxId: string;               // Unique ID (e.g., "box-001")
+  boxId: string; // Unique ID (e.g., "box-001")
 
   // Position & Size
   coordinates: BoxCoordinates;
 
   // Classification
-  contentType: ContentType;    // What kind of content
-  language: Language;          // Which language/script
-  readingOrder: number;        // Sequence for reading (1-based)
-  confidence: number;          // AI confidence score (0-1)
+  contentType: ContentType; // What kind of content
+  language: Language; // Which language/script
+  readingOrder: number; // Sequence for reading (1-based)
+  confidence: number; // AI confidence score (0-1)
 
   // Text Content
   text: TextContent;
 
   // Relationships
-  linkedBoxes: string[];       // IDs of related boxes (e.g., footnote refs)
-  parentBox?: string;          // Parent box ID (for hierarchical content)
+  linkedBoxes: string[]; // IDs of related boxes (e.g., footnote refs)
+  parentBox?: string; // Parent box ID (for hierarchical content)
 
   // Inline References (for footnotes embedded in text)
   inlineReferences?: InlineReference[];
 
   // Metadata
-  notes: string;               // User annotations
-  createdBy: 'ai' | 'user';    // Origin
+  notes: string; // User annotations
+  createdBy: "ai" | "user"; // Origin
   lastModifiedBy: UserAttribution;
-  lastModifiedAt: string;      // ISO 8601 timestamp
+  lastModifiedAt: string; // ISO 8601 timestamp
 }
 
 interface InlineReference {
-  referenceId: string;         // Unique ID for this reference
-  type: 'footnote' | 'verse-number' | 'citation';
+  referenceId: string; // Unique ID for this reference
+  type: "footnote" | "verse-number" | "citation";
   position: {
-    charOffset: number;        // Character offset in text (0-based, relative to corrected text)
-    length: number;            // Length of reference text
+    charOffset: number; // Character offset in text (0-based, relative to corrected text)
+    length: number; // Length of reference text
   };
-  targetBoxId: string;         // ID of box being referenced (can be on any page)
-  displayText: string;         // The reference marker (e.g., "1", "2.11", "[5]")
-  sequenceInText: number;      // Order of appearance in text (1-based)
+  targetBoxId: string; // ID of box being referenced (can be on any page)
+  displayText: string; // The reference marker (e.g., "1", "2.11", "[5]")
+  sequenceInText: number; // Order of appearance in text (1-based)
 
   // Optional: Cached location info for efficient lookup (denormalized)
-  targetPageId?: string;       // Page containing target box (for cross-page refs)
-  targetPageNumber?: number;   // User-friendly page number
+  targetPageId?: string; // Page containing target box (for cross-page refs)
+  targetPageNumber?: number; // User-friendly page number
 }
 
 interface BoxCoordinates {
-  x: number;                   // Left edge (pixels from top-left)
-  y: number;                   // Top edge (pixels from top-left)
-  width: number;               // Box width (pixels)
-  height: number;              // Box height (pixels)
-  rotation?: number;           // Rotation in degrees (0-360)
+  x: number; // Left edge (pixels from top-left)
+  y: number; // Top edge (pixels from top-left)
+  width: number; // Box width (pixels)
+  height: number; // Box height (pixels)
+  rotation?: number; // Rotation in degrees (0-360)
 }
 
 type ContentType =
-  | 'verse'                    // Sanskrit verse
-  | 'commentary'               // Commentary text
-  | 'translation'              // Translation
-  | 'transliteration'          // IAST transliteration
-  | 'footnote'                 // Footnote text
-  | 'footnote-reference'       // Footnote marker/number
-  | 'heading'                  // Chapter/section heading
-  | 'subheading'               // Subsection heading
-  | 'page-number'              // Page number
-  | 'verse-number'             // Verse number
-  | 'image'                    // Embedded image
-  | 'table'                    // Table content
-  | 'caption'                  // Image/table caption
-  | 'other';                   // Uncategorized
+  | "verse" // Sanskrit verse
+  | "commentary" // Commentary text
+  | "translation" // Translation
+  | "transliteration" // IAST transliteration
+  | "footnote" // Footnote text
+  | "footnote-reference" // Footnote marker/number
+  | "heading" // Chapter/section heading
+  | "subheading" // Subsection heading
+  | "page-number" // Page number
+  | "verse-number" // Verse number
+  | "image" // Embedded image
+  | "table" // Table content
+  | "caption" // Image/table caption
+  | "other"; // Uncategorized
 
 interface TextContent {
-  ocr: string;                 // Original OCR output (immutable)
-  corrected: string;           // Human-corrected text
-  ocrConfidence: number;       // OCR confidence (0-1)
-  isCorrected: boolean;        // Has human edited text?
+  ocr: string; // Original OCR output (immutable)
+  corrected: string; // Human-corrected text
+  ocrConfidence: number; // OCR confidence (0-1)
+  isCorrected: boolean; // Has human edited text?
   correctionHistory: TextCorrection[];
 }
 
 interface TextCorrection {
   version: number;
-  timestamp: string;           // ISO 8601 timestamp
+  timestamp: string; // ISO 8601 timestamp
   editedBy: UserAttribution;
   before: string;
   after: string;
@@ -618,6 +616,7 @@ interface TextCorrection {
 **Units:** Pixels
 **Precision:** Integer pixels (no sub-pixel precision needed)
 **Validation:**
+
 - `x >= 0 && x < imageWidth`
 - `y >= 0 && y < imageHeight`
 - `width > 0 && x + width <= imageWidth`
@@ -659,6 +658,7 @@ Footnote markers embedded in text are captured as **inline references** within t
 ```
 
 **Visual representation:**
+
 ```
 The Gītā states this principle¹ clearly in Chapter 2.
                               ^
@@ -715,6 +715,7 @@ The Gītā states this principle¹ clearly in Chapter 2.
 ```
 
 **Visual representation:**
+
 ```
 The first principle² appears in Chapter 2³, followed by the second⁴ in Chapter 3.
                   ^                     ^                            ^
@@ -771,6 +772,7 @@ The first principle² appears in Chapter 2³, followed by the second⁴ in Chapt
 ```
 
 **Visual representation:**
+
 ```
 धर्मक्षेत्रे कुरुक्षेत्रे¹²³
                        ^^^
@@ -805,6 +807,7 @@ The first principle² appears in Chapter 2³, followed by the second⁴ in Chapt
 ```
 
 **Visual representation:**
+
 ```
 As stated in the Mahābhārata[5].
                              ^^^
@@ -820,6 +823,7 @@ As stated in the Mahābhārata[5].
 5. **LinkedBoxes**: Must include all target boxes referenced in `inlineReferences`
 
 **When to use:**
+
 - Superscript numbers inline with text (e.g., "principle¹ clearly")
 - Bracketed references (e.g., "states [1] that")
 - Adjacent multiple footnotes (e.g., "verse¹²³")
@@ -834,13 +838,14 @@ Standalone footnote markers get their own bounding box:
 {
   "boxId": "box-ref-001",
   "contentType": "footnote-reference",
-  "coordinates": {"x": 456, "y": 210, "width": 12, "height": 16},
-  "text": {"ocr": "1", "corrected": "1"},
+  "coordinates": { "x": 456, "y": 210, "width": 12, "height": 16 },
+  "text": { "ocr": "1", "corrected": "1" },
   "linkedBoxes": ["box-footnote-001"]
 }
 ```
 
 **When to use:**
+
 - Visually distinct reference markers (verse numbers)
 - References positioned separately from main text
 - References that span multiple lines
@@ -860,14 +865,15 @@ function validateInlineReferences(box: BoundingBox): ValidationResult {
 
   // 1. Ordering: Must be sorted by charOffset
   for (let i = 1; i < refs.length; i++) {
-    if (refs[i].position.charOffset <= refs[i-1].position.charOffset) {
+    if (refs[i].position.charOffset <= refs[i - 1].position.charOffset) {
       return error("References must be ordered by charOffset");
     }
   }
 
   // 2. Non-overlapping: Check for overlaps
   for (let i = 1; i < refs.length; i++) {
-    const prevEnd = refs[i-1].position.charOffset + refs[i-1].position.length;
+    const prevEnd =
+      refs[i - 1].position.charOffset + refs[i - 1].position.length;
     if (refs[i].position.charOffset < prevEnd) {
       return error("Reference positions cannot overlap");
     }
@@ -913,7 +919,7 @@ function validateInlineReferences(box: BoundingBox): ValidationResult {
   },
   "inlineReferences": [
     {
-      "position": {"charOffset": 13, "length": 1},
+      "position": { "charOffset": 13, "length": 1 },
       "displayText": "¹"
     }
   ]
@@ -921,6 +927,7 @@ function validateInlineReferences(box: BoundingBox): ValidationResult {
 ```
 
 **Rationale:**
+
 - Preserves exact character positions
 - No need to recalculate offsets if text is corrected
 - Export process can strip markers if needed
@@ -966,12 +973,12 @@ When text is corrected, inline references must be updated:
 // OCR reads "¹" as "1" or misses it entirely
 {
   "text": {
-    "ocr": "The principle1 is clear.",      // OCR error: "1" instead of "¹"
+    "ocr": "The principle1 is clear.", // OCR error: "1" instead of "¹"
     "corrected": "The principle¹ is clear." // User corrects
   },
   "inlineReferences": [
     {
-      "position": {"charOffset": 13, "length": 1},
+      "position": { "charOffset": 13, "length": 1 },
       "displayText": "¹"
     }
   ]
@@ -993,9 +1000,9 @@ When text is corrected, inline references must be updated:
     {
       "referenceId": "ref-compound-001",
       "type": "footnote",
-      "position": {"charOffset": 36, "length": 5},
-      "targetBoxId": "box-footnotes-001-003",  // Can reference a group
-      "displayText": "¹⁻³",  // Or "1-3" or "1,2,3"
+      "position": { "charOffset": 36, "length": 5 },
+      "targetBoxId": "box-footnotes-001-003", // Can reference a group
+      "displayText": "¹⁻³", // Or "1-3" or "1,2,3"
       "sequenceInText": 1
     }
   ]
@@ -1010,12 +1017,12 @@ When text is corrected, inline references must be updated:
 // Should NOT happen, but if it does:
 {
   "text": {
-    "ocr": "The prin¹ciple is clear.",  // Malformed - reference splits word
-    "corrected": "The principle¹ is clear."  // User corrects
+    "ocr": "The prin¹ciple is clear.", // Malformed - reference splits word
+    "corrected": "The principle¹ is clear." // User corrects
   },
   "inlineReferences": [
     {
-      "position": {"charOffset": 13, "length": 1},
+      "position": { "charOffset": 13, "length": 1 },
       "displayText": "¹"
     }
   ]
@@ -1031,6 +1038,7 @@ When text is corrected, inline references must be updated:
 #### How It Works
 
 **1. BoxId Uniqueness**
+
 - Every box in the project has a globally unique `boxId`
 - Format: `"box-{type}-{uuid}"` (e.g., `"box-footnote-a3f9d2c1"`)
 - BoxIds must be unique across ALL pages in project
@@ -1061,7 +1069,7 @@ The `metadata.json` maintains an index for efficient lookup:
 ```typescript
 async function resolveReference(
   projectId: string,
-  targetBoxId: string
+  targetBoxId: string,
 ): Promise<BoundingBox> {
   // 1. Look up box location in project metadata
   const metadata = await loadProjectMetadata(projectId);
@@ -1076,7 +1084,7 @@ async function resolveReference(
 
   // 3. Find the box on that page
   const box = page.currentState.boundingBoxes.find(
-    b => b.boxId === targetBoxId
+    (b) => b.boxId === targetBoxId,
   );
 
   return box;
@@ -1088,6 +1096,7 @@ async function resolveReference(
 **4. Maintaining the Index**
 
 Index is updated automatically when:
+
 - New box created → Add to index
 - Box deleted → Remove from index
 - Page moved/renumbered → Update pageNumber in index
@@ -1102,7 +1111,7 @@ function createBox(pageId: string, box: BoundingBox): void {
   metadata.boxIndex[box.boxId] = {
     pageId: pageId,
     pageNumber: page.pageNumber,
-    contentType: box.contentType
+    contentType: box.contentType,
   };
 
   saveProjectMetadata(metadata);
@@ -1165,16 +1174,19 @@ function createBox(pageId: string, box: BoundingBox): void {
 #### UI Considerations
 
 **Navigation:**
+
 - Click reference → Jump to target (even if different page)
 - Show page number in tooltip: "Footnote 23 (page 237)"
 - "Jump back" button after navigating to cross-page reference
 
 **Validation:**
+
 - Check that `targetBoxId` exists in `boxIndex`
 - Warn if target is on different page (not an error, just FYI)
 - Show page number in reference list
 
 **Performance:**
+
 - Don't load all pages to validate references
 - Use boxIndex for validation
 - Lazy-load target pages only when user clicks reference
@@ -1186,11 +1198,13 @@ When OCR misses a footnote reference, users can manually add it through the anno
 #### Scenario: OCR Completely Missed the Reference Marker
 
 **Original page text:**
+
 ```
 The Gītā states this principle¹ clearly in Chapter 2.
 ```
 
 **OCR output (missed the superscript):**
+
 ```json
 {
   "boxId": "box-001",
@@ -1222,7 +1236,7 @@ The Gītā states this principle¹ clearly in Chapter 2.
    {
      "referenceId": "ref-manual-001",
      "type": "footnote",
-     "position": {"charOffset": 32, "length": 1},
+     "position": { "charOffset": 32, "length": 1 },
      "targetBoxId": "box-footnote-001",
      "displayText": "¹",
      "sequenceInText": 1
@@ -1240,7 +1254,7 @@ The Gītā states this principle¹ clearly in Chapter 2.
        "after": {
          "referenceId": "ref-manual-001",
          "type": "footnote",
-         "position": {"charOffset": 32, "length": 1},
+         "position": { "charOffset": 32, "length": 1 },
          "targetBoxId": "box-footnote-001",
          "displayText": "¹",
          "sequenceInText": 1
@@ -1253,11 +1267,13 @@ The Gītā states this principle¹ clearly in Chapter 2.
 #### Scenario: OCR Read Reference as Regular Text
 
 **Original page text:**
+
 ```
 The principle¹ is clear.
 ```
 
 **OCR output (misread superscript as regular "1"):**
+
 ```json
 {
   "boxId": "box-002",
@@ -1285,6 +1301,7 @@ The principle¹ is clear.
 #### Scenario: Multiple Missing References
 
 **OCR output (missed 3 references):**
+
 ```json
 {
   "text": {
@@ -1314,9 +1331,9 @@ The principle¹ is clear.
        "corrected": "The first principle² appears in Chapter 2³, followed by the second⁴ in Chapter 3."
      },
      "inlineReferences": [
-       {"charOffset": 18, "displayText": "²", "sequenceInText": 1},
-       {"charOffset": 41, "displayText": "³", "sequenceInText": 2},
-       {"charOffset": 72, "displayText": "⁴", "sequenceInText": 3}
+       { "charOffset": 18, "displayText": "²", "sequenceInText": 1 },
+       { "charOffset": 41, "displayText": "³", "sequenceInText": 2 },
+       { "charOffset": 72, "displayText": "⁴", "sequenceInText": 3 }
      ]
    }
    ```
@@ -1335,16 +1352,19 @@ To support manual footnote reference addition, the editor must provide:
 ##### 2. Inline Reference Management
 
 **Visual indicators:**
+
 - Highlight inline references in text (different color/underline)
 - Show reference type icon (📝 for footnote, 📖 for citation)
 - Tooltip on hover: "Footnote ¹ → box-footnote-001"
 
 **Add reference button:**
+
 - Appears when text contains superscript/bracket characters
 - "Convert to inline reference" quick action
 - Keyboard shortcut: `Cmd+Shift+R` (Add Reference)
 
 **Link to target:**
+
 - **Dropdown list** of all footnote boxes on current page
 - **Click-to-link**: Click reference, then click target box
 - **Auto-match**: System suggests target based on reference number
@@ -1366,6 +1386,7 @@ Inline References (3)
 ```
 
 **Actions per reference:**
+
 - Edit position
 - Change target
 - Remove reference
@@ -1384,6 +1405,7 @@ Real-time validation indicators:
 ##### 5. Auto-Detection Helpers
 
 **Smart detection:**
+
 - When user types superscript characters, show prompt:
   ```
   "Detected potential footnote reference ¹.
@@ -1391,6 +1413,7 @@ Real-time validation indicators:
   ```
 
 **Batch conversion:**
+
 - "Detect all potential references" button
 - Scans text for superscripts/brackets
 - Shows list of candidates for user approval
@@ -1442,10 +1465,10 @@ interface AddInlineReferenceRequest {
     charOffset: number;
     length: number;
   };
-  type: 'footnote' | 'verse-number' | 'citation';
+  type: "footnote" | "verse-number" | "citation";
   targetBoxId: string;
   displayText: string;
-  note?: string;  // Optional user note explaining addition
+  note?: string; // Optional user note explaining addition
 }
 
 interface AddInlineReferenceResponse {
@@ -1463,11 +1486,13 @@ interface AddInlineReferenceResponse {
 ```typescript
 function validateInlineReferenceAddition(
   box: BoundingBox,
-  newRef: InlineReference
+  newRef: InlineReference,
 ): ValidationResult {
-
   // 1. Check position is within text bounds
-  if (newRef.position.charOffset + newRef.position.length > box.text.corrected.length) {
+  if (
+    newRef.position.charOffset + newRef.position.length >
+    box.text.corrected.length
+  ) {
     return error("Position exceeds text length");
   }
 
@@ -1483,17 +1508,19 @@ function validateInlineReferenceAddition(
   if (!targetBox) {
     return error("Target footnote box not found");
   }
-  if (targetBox.contentType !== 'footnote') {
+  if (targetBox.contentType !== "footnote") {
     return warning("Target box is not a footnote (but allowed)");
   }
 
   // 4. Check displayText matches text content at position
   const textAtPosition = box.text.corrected.substr(
     newRef.position.charOffset,
-    newRef.position.length
+    newRef.position.length,
   );
   if (textAtPosition !== newRef.displayText) {
-    return error(`Text mismatch: expected "${newRef.displayText}", found "${textAtPosition}"`);
+    return error(
+      `Text mismatch: expected "${newRef.displayText}", found "${textAtPosition}"`,
+    );
   }
 
   return success();
@@ -1501,9 +1528,10 @@ function validateInlineReferenceAddition(
 ```
 
 **User-friendly error messages:**
+
 - ❌ "Cannot add reference: Position overlaps with existing reference ²"
 - ❌ "Cannot add reference: Text at position doesn't match reference marker"
-- ⚠️  "Warning: Target box is not marked as a footnote. Continue anyway?"
+- ⚠️ "Warning: Target box is not marked as a footnote. Continue anyway?"
 - ✅ "Footnote reference added successfully"
 
 ---
@@ -1517,16 +1545,16 @@ function validateInlineReferenceAddition(
 const original = {
   text: "The principle¹ is clear.",
   inlineReferences: [
-    {charOffset: 13, length: 1, displayText: "¹"}  // Points to "¹"
-  ]
+    { charOffset: 13, length: 1, displayText: "¹" }, // Points to "¹"
+  ],
 };
 
 // User inserts "fundamental " before "principle"
 const edited = {
   text: "The fundamental principle¹ is clear.",
   inlineReferences: [
-    {charOffset: 13, length: 1, displayText: "¹"}  // NOW POINTS TO WRONG POSITION!
-  ]
+    { charOffset: 13, length: 1, displayText: "¹" }, // NOW POINTS TO WRONG POSITION!
+  ],
 };
 ```
 
@@ -1534,17 +1562,17 @@ const edited = {
 
 ```typescript
 interface TextChange {
-  type: 'insert' | 'delete' | 'replace';
-  position: number;        // Where change occurred
-  insertedLength: number;  // Characters inserted (0 for delete)
-  deletedLength: number;   // Characters deleted (0 for insert)
-  oldText?: string;        // For undo/validation
-  newText?: string;        // For redo/validation
+  type: "insert" | "delete" | "replace";
+  position: number; // Where change occurred
+  insertedLength: number; // Characters inserted (0 for delete)
+  deletedLength: number; // Characters deleted (0 for insert)
+  oldText?: string; // For undo/validation
+  newText?: string; // For redo/validation
 }
 
 function updateInlineReferenceOffsets(
   box: BoundingBox,
-  change: TextChange
+  change: TextChange,
 ): BoundingBox {
   const { position, insertedLength, deletedLength } = change;
   const delta = insertedLength - deletedLength;
@@ -1567,8 +1595,8 @@ function updateInlineReferenceOffsets(
         ...ref,
         position: {
           ...ref.position,
-          charOffset: refStart + delta
-        }
+          charOffset: refStart + delta,
+        },
       });
       continue;
     }
@@ -1578,7 +1606,7 @@ function updateInlineReferenceOffsets(
       updatedRefs.push({
         ...ref,
         isOrphaned: true,
-        orphanedReason: 'deleted_with_text'
+        orphanedReason: "deleted_with_text",
       });
       continue;
     }
@@ -1590,7 +1618,7 @@ function updateInlineReferenceOffsets(
       updatedRefs.push({
         ...ref,
         needsReview: true,
-        reviewReason: 'text_changed_within_reference'
+        reviewReason: "text_changed_within_reference",
       });
       continue;
     }
@@ -1600,12 +1628,12 @@ function updateInlineReferenceOffsets(
   for (const ref of updatedRefs) {
     const textAtOffset = box.text.corrected.substr(
       ref.position.charOffset,
-      ref.position.length
+      ref.position.length,
     );
 
     if (textAtOffset !== ref.displayText && !ref.isOrphaned) {
       ref.needsReview = true;
-      ref.reviewReason = 'display_text_mismatch';
+      ref.reviewReason = "display_text_mismatch";
     }
   }
 
@@ -1617,7 +1645,7 @@ function updateInlineReferenceOffsets(
 
   return {
     ...box,
-    inlineReferences: updatedRefs
+    inlineReferences: updatedRefs,
   };
 }
 ```
@@ -1629,11 +1657,11 @@ interface InlineReference {
   // ... existing fields
 
   // Data integrity flags
-  isOrphaned?: boolean;           // Target box not found or deleted
-  orphanedReason?: string;        // Why it's orphaned
-  needsReview?: boolean;          // Offset may be invalid
-  reviewReason?: string;          // Why review is needed
-  lastValidated?: string;         // ISO 8601 timestamp
+  isOrphaned?: boolean; // Target box not found or deleted
+  orphanedReason?: string; // Why it's orphaned
+  needsReview?: boolean; // Offset may be invalid
+  reviewReason?: string; // Why review is needed
+  lastValidated?: string; // ISO 8601 timestamp
 }
 ```
 
@@ -1642,18 +1670,18 @@ interface InlineReference {
 ```typescript
 // PUT /api/pages/:pageId/boxes/:boxId/text
 interface UpdateTextRequest {
-  oldText: string;           // Current text (for validation)
-  newText: string;           // New text
-  changes: TextChange[];     // Detailed change log
-  note?: string;             // User explanation
+  oldText: string; // Current text (for validation)
+  newText: string; // New text
+  changes: TextChange[]; // Detailed change log
+  note?: string; // User explanation
 }
 
 interface UpdateTextResponse {
   updatedBox: BoundingBox;
   affectedReferences: {
-    updated: string[];       // Reference IDs with updated offsets
-    orphaned: string[];      // Reference IDs marked as orphaned
-    needsReview: string[];   // Reference IDs needing manual review
+    updated: string[]; // Reference IDs with updated offsets
+    orphaned: string[]; // Reference IDs marked as orphaned
+    needsReview: string[]; // Reference IDs needing manual review
   };
   versionNumber: number;
   commitSha: string;
@@ -1664,6 +1692,7 @@ interface UpdateTextResponse {
 
 1. **Real-time offset preview** - Show updated positions as user types
 2. **Warning dialogs** - Alert when edit affects references:
+
    ```
    ⚠️  Warning: This edit will affect 3 inline references.
    - Reference ¹ offset will change: 13 → 25
@@ -1672,6 +1701,7 @@ interface UpdateTextResponse {
 
    [Continue] [Cancel]
    ```
+
 3. **Post-edit validation** - Show list of references needing attention
 4. **Undo/redo support** - Restore references when text is reverted
 
@@ -1699,16 +1729,16 @@ interface PageAnnotations {
 
 interface ValidationStatus {
   isValid: boolean;
-  lastValidated: string;           // ISO 8601 timestamp
-  orphanedReferences: string[];    // Reference IDs with no target
-  orphanedFootnotes: string[];     // Footnote box IDs with no references
-  brokenCrossPageRefs: string[];   // References to non-existent pages
+  lastValidated: string; // ISO 8601 timestamp
+  orphanedReferences: string[]; // Reference IDs with no target
+  orphanedFootnotes: string[]; // Footnote box IDs with no references
+  brokenCrossPageRefs: string[]; // References to non-existent pages
   numberMismatches: NumberMismatch[];
 }
 
 interface ValidationWarning {
   type: ValidationWarningType;
-  severity: 'error' | 'warning' | 'info';
+  severity: "error" | "warning" | "info";
   boxId?: string;
   referenceId?: string;
   message: string;
@@ -1717,21 +1747,21 @@ interface ValidationWarning {
 }
 
 type ValidationWarningType =
-  | 'orphaned_reference'           // Reference points to non-existent box
-  | 'orphaned_footnote'            // Footnote has no references
-  | 'cross_page_broken'            // Cross-page target missing
-  | 'number_mismatch'              // Reference "1" → Footnote "2"
-  | 'duplicate_reference'          // Same footnote referenced multiple times
-  | 'offset_mismatch'              // displayText doesn't match text at offset
-  | 'overlapping_references'       // References overlap
-  | 'text_changed_unupdated';      // Text edited but offsets not updated
+  | "orphaned_reference" // Reference points to non-existent box
+  | "orphaned_footnote" // Footnote has no references
+  | "cross_page_broken" // Cross-page target missing
+  | "number_mismatch" // Reference "1" → Footnote "2"
+  | "duplicate_reference" // Same footnote referenced multiple times
+  | "offset_mismatch" // displayText doesn't match text at offset
+  | "overlapping_references" // References overlap
+  | "text_changed_unupdated"; // Text edited but offsets not updated
 
 interface NumberMismatch {
   referenceId: string;
-  referenceNumber: string;         // "1"
+  referenceNumber: string; // "1"
   footnoteBoxId: string;
-  footnoteNumber: string;          // "2"
-  confidence: number;              // 0-1: How confident we are it's wrong
+  footnoteNumber: string; // "2"
+  confidence: number; // 0-1: How confident we are it's wrong
 }
 ```
 
@@ -1747,13 +1777,13 @@ interface ValidatePageResponse {
 
 // POST /api/pages/:pageId/auto-fix
 interface AutoFixRequest {
-  warningIds: string[];            // Which warnings to fix
-  confirmAll: boolean;             // Fix all auto-fixable
+  warningIds: string[]; // Which warnings to fix
+  confirmAll: boolean; // Fix all auto-fixable
 }
 
 interface AutoFixResponse {
-  fixed: string[];                 // Warning IDs that were fixed
-  failed: string[];                // Warning IDs that couldn't be fixed
+  fixed: string[]; // Warning IDs that were fixed
+  failed: string[]; // Warning IDs that couldn't be fixed
   versionNumber: number;
 }
 ```
@@ -1761,7 +1791,10 @@ interface AutoFixResponse {
 **Validation Workflow:**
 
 ```typescript
-async function validatePage(page: PageAnnotations, project: ProjectMetadata): ValidationStatus {
+async function validatePage(
+  page: PageAnnotations,
+  project: ProjectMetadata,
+): ValidationStatus {
   const warnings: ValidationWarning[] = [];
   const orphanedReferences: string[] = [];
   const orphanedFootnotes: string[] = [];
@@ -1775,31 +1808,31 @@ async function validatePage(page: PageAnnotations, project: ProjectMetadata): Va
       if (!targetLocation) {
         orphanedReferences.push(ref.referenceId);
         warnings.push({
-          type: 'orphaned_reference',
-          severity: 'error',
+          type: "orphaned_reference",
+          severity: "error",
           boxId: box.boxId,
           referenceId: ref.referenceId,
           message: `Reference "${ref.displayText}" points to non-existent box ${ref.targetBoxId}`,
-          suggestedFix: 'Remove reference or link to different footnote',
-          autoFixable: false
+          suggestedFix: "Remove reference or link to different footnote",
+          autoFixable: false,
         });
       }
 
       // Validate offset matches text
       const textAtOffset = box.text.corrected.substr(
         ref.position.charOffset,
-        ref.position.length
+        ref.position.length,
       );
 
       if (textAtOffset !== ref.displayText) {
         warnings.push({
-          type: 'offset_mismatch',
-          severity: 'warning',
+          type: "offset_mismatch",
+          severity: "warning",
           boxId: box.boxId,
           referenceId: ref.referenceId,
           message: `Reference displayText "${ref.displayText}" doesn't match text "${textAtOffset}" at offset ${ref.position.charOffset}`,
-          suggestedFix: 'Update charOffset or displayText',
-          autoFixable: true  // Can search for displayText in text
+          suggestedFix: "Update charOffset or displayText",
+          autoFixable: true, // Can search for displayText in text
         });
       }
     }
@@ -1807,23 +1840,23 @@ async function validatePage(page: PageAnnotations, project: ProjectMetadata): Va
 
   // 2. Check all footnotes for references
   const footnoteBoxes = page.currentState.boundingBoxes.filter(
-    b => b.contentType === 'footnote'
+    (b) => b.contentType === "footnote",
   );
 
   for (const footnote of footnoteBoxes) {
-    const hasReferences = page.currentState.boundingBoxes.some(box =>
-      box.inlineReferences?.some(ref => ref.targetBoxId === footnote.boxId)
+    const hasReferences = page.currentState.boundingBoxes.some((box) =>
+      box.inlineReferences?.some((ref) => ref.targetBoxId === footnote.boxId),
     );
 
     if (!hasReferences) {
       orphanedFootnotes.push(footnote.boxId);
       warnings.push({
-        type: 'orphaned_footnote',
-        severity: 'warning',
+        type: "orphaned_footnote",
+        severity: "warning",
         boxId: footnote.boxId,
         message: `Footnote "${footnote.text.corrected.substr(0, 50)}..." has no references`,
-        suggestedFix: 'Add reference in text or mark as general note',
-        autoFixable: false
+        suggestedFix: "Add reference in text or mark as general note",
+        autoFixable: false,
       });
     }
   }
@@ -1837,9 +1870,12 @@ async function validatePage(page: PageAnnotations, project: ProjectMetadata): Va
       const targetLocation = project.boxIndex[ref.targetBoxId];
       if (!targetLocation) continue;
 
-      const targetPage = await loadPage(project.projectId, targetLocation.pageId);
+      const targetPage = await loadPage(
+        project.projectId,
+        targetLocation.pageId,
+      );
       const targetBox = targetPage.currentState.boundingBoxes.find(
-        b => b.boxId === ref.targetBoxId
+        (b) => b.boxId === ref.targetBoxId,
       );
 
       if (targetBox) {
@@ -1847,13 +1883,13 @@ async function validatePage(page: PageAnnotations, project: ProjectMetadata): Va
 
         if (footnoteNumber && refNumber !== footnoteNumber) {
           warnings.push({
-            type: 'number_mismatch',
-            severity: 'warning',
+            type: "number_mismatch",
+            severity: "warning",
             boxId: box.boxId,
             referenceId: ref.referenceId,
             message: `Reference "${refNumber}" links to footnote "${footnoteNumber}"`,
             suggestedFix: `Link to footnote ${refNumber} instead?`,
-            autoFixable: false  // Need user confirmation
+            autoFixable: false, // Need user confirmation
           });
         }
       }
@@ -1861,12 +1897,12 @@ async function validatePage(page: PageAnnotations, project: ProjectMetadata): Va
   }
 
   return {
-    isValid: warnings.filter(w => w.severity === 'error').length === 0,
+    isValid: warnings.filter((w) => w.severity === "error").length === 0,
     lastValidated: new Date().toISOString(),
     orphanedReferences,
     orphanedFootnotes,
-    brokenCrossPageRefs: [],  // Would check cross-page refs here
-    numberMismatches: []       // Would populate from warnings
+    brokenCrossPageRefs: [], // Would check cross-page refs here
+    numberMismatches: [], // Would populate from warnings
   };
 }
 ```
@@ -1923,7 +1959,7 @@ interface IncomingReference {
   sourcePageId: string;
   sourcePageNumber: number;
   displayText: string;
-  textExcerpt: string;            // "...principle¹ is clear..."
+  textExcerpt: string; // "...principle¹ is clear..."
   createdAt: string;
 }
 ```
@@ -1934,7 +1970,7 @@ interface IncomingReference {
 // When inline reference is added
 async function addInlineReference(
   sourceBox: BoundingBox,
-  reference: InlineReference
+  reference: InlineReference,
 ): void {
   // 1. Add reference to source box
   sourceBox.inlineReferences.push(reference);
@@ -1943,7 +1979,7 @@ async function addInlineReference(
   const targetLocation = project.boxIndex[reference.targetBoxId];
   const targetPage = await loadPage(project.projectId, targetLocation.pageId);
   const targetBox = targetPage.currentState.boundingBoxes.find(
-    b => b.boxId === reference.targetBoxId
+    (b) => b.boxId === reference.targetBoxId,
   );
 
   if (targetBox) {
@@ -1955,14 +1991,17 @@ async function addInlineReference(
       sourcePageNumber: currentPage.pageNumber,
       displayText: reference.displayText,
       textExcerpt: getTextExcerpt(sourceBox.text.corrected, reference.position),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     });
 
     await savePage(targetPage);
   }
 }
 
-function getTextExcerpt(text: string, position: {charOffset: number, length: number}): string {
+function getTextExcerpt(
+  text: string,
+  position: { charOffset: number; length: number },
+): string {
   const start = Math.max(0, position.charOffset - 20);
   const end = Math.min(text.length, position.charOffset + position.length + 20);
   const excerpt = text.substring(start, end);
@@ -1981,7 +2020,7 @@ interface GetIncomingReferencesResponse {
 }
 
 interface IncomingReferenceDetail extends IncomingReference {
-  isValid: boolean;              // Does source reference still exist?
+  isValid: boolean; // Does source reference still exist?
   lastValidated: string;
 }
 
@@ -2041,8 +2080,8 @@ Referenced by: 3 places
 ```typescript
 interface VersionHistoryEntry {
   // Version Identity
-  version: number;             // Sequential version number (1-based)
-  timestamp: string;           // ISO 8601 timestamp
+  version: number; // Sequential version number (1-based)
+  timestamp: string; // ISO 8601 timestamp
 
   // Attribution
   editedBy: UserAttribution;
@@ -2052,29 +2091,29 @@ interface VersionHistoryEntry {
   changes: ChangeDetails;
 
   // Version Control
-  commitSha: string;           // Git commit SHA
+  commitSha: string; // Git commit SHA
 
   // Context
-  note: string;                // User explanation of change
+  note: string; // User explanation of change
 }
 
 type ChangeType =
-  | 'ai_generated'             // Initial AI detection
-  | 'manual_edit'              // User edited annotations
-  | 'ocr_extraction'           // OCR text extracted
-  | 'text_correction'          // User corrected OCR text
-  | 'box_created'              // New box added
-  | 'box_deleted'              // Box removed
-  | 'box_moved'                // Position changed
-  | 'box_resized'              // Size changed
-  | 'box_relabeled'            // Type/language changed
-  | 'reading_order_changed'    // Sequence updated
-  | 'boxes_merged'             // Multiple boxes combined
-  | 'box_split'                // One box split into multiple
-  | 'inline_reference_added'   // Inline footnote reference added
-  | 'inline_reference_removed' // Inline footnote reference removed
-  | 'inline_reference_modified'// Inline footnote reference changed
-  | 'review_status_changed';   // Review status updated
+  | "ai_generated" // Initial AI detection
+  | "manual_edit" // User edited annotations
+  | "ocr_extraction" // OCR text extracted
+  | "text_correction" // User corrected OCR text
+  | "box_created" // New box added
+  | "box_deleted" // Box removed
+  | "box_moved" // Position changed
+  | "box_resized" // Size changed
+  | "box_relabeled" // Type/language changed
+  | "reading_order_changed" // Sequence updated
+  | "boxes_merged" // Multiple boxes combined
+  | "box_split" // One box split into multiple
+  | "inline_reference_added" // Inline footnote reference added
+  | "inline_reference_removed" // Inline footnote reference removed
+  | "inline_reference_modified" // Inline footnote reference changed
+  | "review_status_changed"; // Review status updated
 
 type ChangeDetails =
   | CreateChange
@@ -2090,40 +2129,40 @@ type ChangeDetails =
   | ReviewStatusChange;
 
 interface CreateChange {
-  action: 'created';
-  boxId: string | null;        // null for batch operations
+  action: "created";
+  boxId: string | null; // null for batch operations
   details: string;
 }
 
 interface MoveChange {
-  action: 'moved';
+  action: "moved";
   boxId: string;
   before: { x: number; y: number };
   after: { x: number; y: number };
 }
 
 interface ResizeChange {
-  action: 'resized';
+  action: "resized";
   boxId: string;
   before: { width: number; height: number };
   after: { width: number; height: number };
 }
 
 interface DeleteChange {
-  action: 'deleted';
+  action: "deleted";
   boxId: string;
-  deletedBox: BoundingBox;     // Store deleted box for potential restore
+  deletedBox: BoundingBox; // Store deleted box for potential restore
 }
 
 interface RelabelChange {
-  action: 'relabeled';
+  action: "relabeled";
   boxId: string;
   before: { contentType: ContentType; language: Language };
   after: { contentType: ContentType; language: Language };
 }
 
 interface ReadingOrderChange {
-  action: 'reading_order_changed';
+  action: "reading_order_changed";
   changes: Array<{
     boxId: string;
     before: number;
@@ -2132,34 +2171,37 @@ interface ReadingOrderChange {
 }
 
 interface MergeChange {
-  action: 'merged';
+  action: "merged";
   sourceBoxIds: string[];
   targetBoxId: string;
 }
 
 interface SplitChange {
-  action: 'split';
+  action: "split";
   sourceBoxId: string;
   newBoxIds: string[];
 }
 
 interface TextCorrectionChange {
-  action: 'text_corrected';
+  action: "text_corrected";
   boxId: string;
   before: string;
   after: string;
 }
 
 interface InlineReferenceChange {
-  action: 'inline_reference_added' | 'inline_reference_removed' | 'inline_reference_modified';
+  action:
+    | "inline_reference_added"
+    | "inline_reference_removed"
+    | "inline_reference_modified";
   boxId: string;
   referenceId: string;
-  before?: InlineReference;  // For removed/modified
-  after?: InlineReference;   // For added/modified
+  before?: InlineReference; // For removed/modified
+  after?: InlineReference; // For added/modified
 }
 
 interface ReviewStatusChange {
-  action: 'review_status_changed';
+  action: "review_status_changed";
   before: ReviewStatus;
   after: ReviewStatus;
 }
@@ -2178,41 +2220,41 @@ interface ReviewStatusChange {
 ```typescript
 interface CostLogEntry {
   // Entry Identity
-  entryId: string;             // Unique ID (e.g., "cost_abc123")
-  timestamp: string;           // ISO 8601 timestamp
+  entryId: string; // Unique ID (e.g., "cost_abc123")
+  timestamp: string; // ISO 8601 timestamp
 
   // Context
-  projectId: string;           // Which project
-  pageId?: string;             // Which page (if applicable)
-  operation: CostOperation;    // What operation
+  projectId: string; // Which project
+  pageId?: string; // Which page (if applicable)
+  operation: CostOperation; // What operation
 
   // Cost Details
-  provider: string;            // API provider (e.g., "google-ai")
-  service: string;             // Specific service (e.g., "document-ai-ocr")
-  units: number;               // Units consumed (e.g., pages, API calls)
-  costPerUnit: number;         // USD per unit
-  totalCost: number;           // Total USD cost
-  currency: 'USD';             // Always USD for v1
+  provider: string; // API provider (e.g., "google-ai")
+  service: string; // Specific service (e.g., "document-ai-ocr")
+  units: number; // Units consumed (e.g., pages, API calls)
+  costPerUnit: number; // USD per unit
+  totalCost: number; // Total USD cost
+  currency: "USD"; // Always USD for v1
 
   // API Details
-  apiRequestId?: string;       // Provider's request ID
-  apiResponseTime?: number;    // Milliseconds
-  apiStatus: 'success' | 'failed' | 'partial';
+  apiRequestId?: string; // Provider's request ID
+  apiResponseTime?: number; // Milliseconds
+  apiStatus: "success" | "failed" | "partial";
 
   // Metadata
-  userId: string;              // Who initiated
-  notes?: string;              // Additional context
+  userId: string; // Who initiated
+  notes?: string; // Additional context
 }
 
 type CostOperation =
-  | 'pdf-upload'
-  | 'image-preprocessing'
-  | 'layout-detection'
-  | 'ocr-extraction'
-  | 'text-analysis'
-  | 'export-generation'
-  | 'storage'
-  | 'other';
+  | "pdf-upload"
+  | "image-preprocessing"
+  | "layout-detection"
+  | "ocr-extraction"
+  | "text-analysis"
+  | "export-generation"
+  | "storage"
+  | "other";
 ```
 
 ### Example (JSONL format)
@@ -2224,6 +2266,7 @@ type CostOperation =
 ```
 
 **Why JSONL?**
+
 - Append-only (fast writes)
 - No need to parse entire file to add entry
 - Easy to stream/process line-by-line
@@ -2240,40 +2283,41 @@ type CostOperation =
 ```typescript
 interface OcrResult {
   // Identity
-  resultId: string;            // Unique ID
-  pageId: string;              // Which page
-  boxId: string;               // Which bounding box
+  resultId: string; // Unique ID
+  pageId: string; // Which page
+  boxId: string; // Which bounding box
 
   // OCR Output
-  text: string;                // Extracted text
-  confidence: number;          // Overall confidence (0-1)
+  text: string; // Extracted text
+  confidence: number; // Overall confidence (0-1)
 
   // Per-Word Details (optional)
   words?: OcrWord[];
 
   // OCR Metadata
-  engine: string;              // OCR engine used (e.g., "document-ai")
-  language: Language;          // Detected/specified language
-  script: string;              // Script (e.g., "Devanagari", "Latin")
+  engine: string; // OCR engine used (e.g., "document-ai")
+  language: Language; // Detected/specified language
+  script: string; // Script (e.g., "Devanagari", "Latin")
 
   // Processing
-  processingTime: number;      // Milliseconds
-  apiRequestId?: string;       // Provider's request ID
+  processingTime: number; // Milliseconds
+  apiRequestId?: string; // Provider's request ID
 
   // Timestamps
-  extractedAt: string;         // ISO 8601 timestamp
+  extractedAt: string; // ISO 8601 timestamp
 }
 
 interface OcrWord {
-  text: string;                // Word text
-  confidence: number;          // Word confidence (0-1)
-  boundingBox: {               // Word position within box
+  text: string; // Word text
+  confidence: number; // Word confidence (0-1)
+  boundingBox: {
+    // Word position within box
     x: number;
     y: number;
     width: number;
     height: number;
   };
-  language?: Language;         // Word-level language (for mixed text)
+  language?: Language; // Word-level language (for mixed text)
 }
 ```
 
@@ -2290,12 +2334,12 @@ interface OcrWord {
     {
       "text": "धर्मक्षेत्रे",
       "confidence": 0.95,
-      "boundingBox": {"x": 0, "y": 0, "width": 120, "height": 24}
+      "boundingBox": { "x": 0, "y": 0, "width": 120, "height": 24 }
     },
     {
       "text": "कुरुक्षेत्रे",
       "confidence": 0.88,
-      "boundingBox": {"x": 125, "y": 0, "width": 130, "height": 24}
+      "boundingBox": { "x": 125, "y": 0, "width": 130, "height": 24 }
     }
   ],
   "engine": "google-document-ai",
@@ -2318,52 +2362,47 @@ interface OcrWord {
 ```typescript
 interface ImageMetadata {
   // Google Drive Reference
-  driveFileId: string;         // Google Drive file ID
-  driveUrl?: string;           // Direct download URL (if available)
+  driveFileId: string; // Google Drive file ID
+  driveUrl?: string; // Direct download URL (if available)
 
   // File Information
-  fileName: string;            // File name (e.g., "page-001.png" or "enhanced-page-001.png")
-  format: ImageFormat;         // Image format
-  fileSizeBytes: number;       // File size
-  sha256: string;              // Checksum for integrity
+  fileName: string; // File name (e.g., "page-001.png" or "enhanced-page-001.png")
+  format: ImageFormat; // Image format
+  fileSizeBytes: number; // File size
+  sha256: string; // Checksum for integrity
 
   // Image Properties
-  width: number;               // Width in pixels
-  height: number;              // Height in pixels
-  dpi: number;                 // Dots per inch (typically 300)
-  colorSpace?: string;         // Color space (e.g., "RGB", "Grayscale")
-  bitDepth?: number;           // Bits per channel
+  width: number; // Width in pixels
+  height: number; // Height in pixels
+  dpi: number; // Dots per inch (typically 300)
+  colorSpace?: string; // Color space (e.g., "RGB", "Grayscale")
+  bitDepth?: number; // Bits per channel
 
   // Processing Status
-  isPreprocessed: boolean;     // Has undergone preprocessing
+  isPreprocessed: boolean; // Has undergone preprocessing
   preprocessingApplied?: PreprocessingOperation[]; // Operations applied (if any)
 
   // Quality Metrics (from pre-processing analysis)
   qualityMetrics?: {
-    skewAngle: number;         // Detected skew in degrees (0 = perfect)
-    contrast: number;          // Contrast level 0-1 (higher is better)
-    brightness: number;        // Brightness 0-1 (0.4-0.8 ideal)
-    noiseLevel: number;        // Noise 0-1 (lower is better)
-    overallQuality: 'excellent' | 'good' | 'fair' | 'poor';
+    skewAngle: number; // Detected skew in degrees (0 = perfect)
+    contrast: number; // Contrast level 0-1 (higher is better)
+    brightness: number; // Brightness 0-1 (0.4-0.8 ideal)
+    noiseLevel: number; // Noise 0-1 (lower is better)
+    overallQuality: "excellent" | "good" | "fair" | "poor";
   };
 
   // Timestamps
-  uploadedAt: string;          // ISO 8601 timestamp
-  processedAt?: string;        // ISO 8601 timestamp (if preprocessed)
+  uploadedAt: string; // ISO 8601 timestamp
+  processedAt?: string; // ISO 8601 timestamp (if preprocessed)
 }
 
 type PreprocessingOperation =
-  | 'deskew'            // Rotation correction
-  | 'color-correction'  // Normalize colors, improve contrast
-  | 'noise-reduction'   // Remove speckles and grain
-  | 'border-crop';      // Remove margins
+  | "deskew" // Rotation correction
+  | "color-correction" // Normalize colors, improve contrast
+  | "noise-reduction" // Remove speckles and grain
+  | "border-crop"; // Remove margins
 
-type ImageFormat =
-  | 'png'
-  | 'jpg'
-  | 'jpeg'
-  | 'tiff'
-  | 'webp';
+type ImageFormat = "png" | "jpg" | "jpeg" | "tiff" | "webp";
 ```
 
 ### Example
@@ -2405,18 +2444,18 @@ type ImageFormat =
 ```typescript
 interface ExportConfiguration {
   // Export Identity
-  exportId: string;            // Unique ID
-  projectId: string;           // Source project
+  exportId: string; // Unique ID
+  projectId: string; // Source project
 
   // Format & Output
   format: ExportFormat;
   outputFileName: string;
 
   // Content Selection
-  includedPages: number[] | 'all'; // Which pages to export
+  includedPages: number[] | "all"; // Which pages to export
   includeImages: boolean;
-  includeLowConfidence: boolean;   // Include text with confidence < threshold
-  confidenceThreshold: number;     // 0-1
+  includeLowConfidence: boolean; // Include text with confidence < threshold
+  confidenceThreshold: number; // 0-1
 
   // Format-Specific Options
   markdown?: MarkdownExportOptions;
@@ -2424,37 +2463,37 @@ interface ExportConfiguration {
   json?: JsonExportOptions;
 
   // Attribution
-  includeAttribution: boolean;     // Include contributor list
-  includeVersionHistory: boolean;  // Include edit history
-  includeMetadata: boolean;        // Include project metadata
+  includeAttribution: boolean; // Include contributor list
+  includeVersionHistory: boolean; // Include edit history
+  includeMetadata: boolean; // Include project metadata
 
   // Generated Export
-  generatedAt?: string;            // ISO 8601 timestamp
+  generatedAt?: string; // ISO 8601 timestamp
   generatedBy?: UserAttribution;
-  outputFilePath?: string;         // Path in repository
-  outputFileSize?: number;         // Bytes
-  outputSha256?: string;           // Checksum
+  outputFilePath?: string; // Path in repository
+  outputFileSize?: number; // Bytes
+  outputSha256?: string; // Checksum
 }
 
 interface MarkdownExportOptions {
-  flavor: 'quarto' | 'pandoc' | 'commonmark';
+  flavor: "quarto" | "pandoc" | "commonmark";
   includeYamlFrontmatter: boolean;
-  useSemanticClasses: boolean;     // .verse, .commentary, etc.
-  languageTags: boolean;           // {lang="sa"} annotations
-  parallelText: boolean;           // Side-by-side original + translation
-  citationFormat?: string;         // Citation style
-  tocDepth: number;                // Table of contents depth (0 = none)
+  useSemanticClasses: boolean; // .verse, .commentary, etc.
+  languageTags: boolean; // {lang="sa"} annotations
+  parallelText: boolean; // Side-by-side original + translation
+  citationFormat?: string; // Citation style
+  tocDepth: number; // Table of contents depth (0 = none)
 }
 
 interface HocrExportOptions {
   includeConfidence: boolean;
   includeBoundingBoxes: boolean;
-  includeWordLevel: boolean;       // Word-level hOCR
+  includeWordLevel: boolean; // Word-level hOCR
 }
 
 interface JsonExportOptions {
-  pretty: boolean;                 // Pretty-print JSON
-  includeRawOcr: boolean;          // Include original OCR output
+  pretty: boolean; // Pretty-print JSON
+  includeRawOcr: boolean; // Include original OCR output
   includeVersionHistory: boolean;
 }
 ```
@@ -2516,6 +2555,7 @@ schemas/
 ```
 
 **Validation Strategy:**
+
 - Validate on write (before saving to repository)
 - Validate on read (after loading from repository)
 - Use JSON Schema Draft 2020-12
@@ -2526,6 +2566,7 @@ schemas/
 ## Data Integrity Checks
 
 ### On Write
+
 - Validate against JSON Schema
 - Check referential integrity (Drive file IDs exist)
 - Verify checksums (SHA-256)
@@ -2533,12 +2574,14 @@ schemas/
 - Validate coordinates within image bounds
 
 ### On Read
+
 - Validate against JSON Schema
 - Verify checksums match
 - Check for orphaned references
 - Detect missing files
 
 ### Periodic Maintenance
+
 - Find Drive files without GitHub references (orphans)
 - Find GitHub references to missing Drive files (broken links)
 - Validate all checksums
@@ -2557,9 +2600,10 @@ If schemas change in future versions:
 5. **Document changes**: Update this document with migration notes
 
 **Example:**
+
 ```typescript
 interface ProjectMetadata {
-  schemaVersion: string;  // e.g., "1.0.0"
+  schemaVersion: string; // e.g., "1.0.0"
   // ... rest of schema
 }
 ```
@@ -2593,6 +2637,7 @@ interface ProjectMetadata {
 16. ✅ BoxCoordinates - Position structure
 
 **Key Design Decisions:**
+
 - **Plain text JSON**: Git-friendly, human-readable
 - **JSONL for logs**: Append-only, efficient
 - **SHA-256 checksums**: Data integrity
@@ -2607,27 +2652,32 @@ interface ProjectMetadata {
 ### Critical Data Integrity Features
 
 **1. Character Offset Updates**
+
 - Automatic update algorithm when text changes
 - 4 cases handled: before, after, within deletion, spanning boundary
 - Orphaned/needs-review flags when offsets become invalid
 
 **2. Validation System**
+
 - 8 warning types (orphaned refs, mismatches, etc.)
 - Auto-fixable vs manual resolution
 - Validation API endpoints
 - Real-time validation in UI
 
 **3. Box Index**
+
 - Project-level index for O(1) cross-page lookups
 - Automatically maintained on box create/delete
 - Prevents loading all pages for validation
 
 **4. Bidirectional Navigation**
+
 - IncomingReferences track all references to a footnote
 - Jump to/from references across pages
 - Text excerpts for context
 
 **5. Multiple Footnote Handling**
+
 - Support for multiple refs in same sentence
 - Adjacent footnotes (¹²³)
 - Ordered by charOffset, validated for overlaps

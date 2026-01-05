@@ -3,6 +3,7 @@
 You are running the full pre-commit checklist for PageSage before allowing a commit.
 
 ## Pre-Commit Requirements (from CLAUDE.md)
+
 - [ ] All tests passing (`npm test`)
 - [ ] No TypeScript errors (`npm run check`)
 - [ ] No linting errors (`npm run lint`)
@@ -47,6 +48,7 @@ npm run build
 ## Expected Output
 
 ### ✅ All Checks Passed
+
 ```
 ✓ Tests passing (127/127)
 ✓ TypeScript check passed
@@ -60,6 +62,7 @@ Ready to commit! ✨
 ```
 
 ### ❌ Checks Failed
+
 ```
 ✗ Tests failing: 3 failed, 124 passed
   - src/lib/ocr/processor.test.ts:42
@@ -104,21 +107,25 @@ git diff --staged
 ## Troubleshooting
 
 ### Tests Failing
+
 - Run specific test: `npm test src/path/to/test.ts`
 - Watch mode: `npm test -- --watch`
 - Debug: Add `debugger` statement and run with `--inspect`
 
 ### TypeScript Errors
+
 - Check type definitions in `/src/lib/types/`
 - Verify imports are correct
 - Run `npm run check -- --watch` for incremental checking
 
 ### Linting Errors
+
 - Auto-fix: `npm run lint -- --fix`
 - Ignore specific line: `// eslint-disable-next-line rule-name`
 - Check `.eslintrc.cjs` for custom rules
 
 ### Build Failures
+
 - Clear `.svelte-kit` cache: `rm -rf .svelte-kit`
 - Check for circular dependencies
 - Verify all imports resolve correctly
@@ -126,7 +133,9 @@ git diff --staged
 ## After All Checks Pass
 
 Remind the user:
+
 1. Review the commit message format:
+
    ```
    <type>: <subject>
 
@@ -144,6 +153,7 @@ Remind the user:
 3. Commit without AI attribution in message
 
 ## Notes
+
 - This command should be run BEFORE every commit
 - Consider setting up a git pre-commit hook to automate
 - If checks take too long, can skip build during development

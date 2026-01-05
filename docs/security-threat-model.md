@@ -11,6 +11,7 @@
 This document identifies security threats for all 11 user flows in PageSage v1 using STRIDE methodology and maps them to OWASP Top 10 vulnerabilities.
 
 **Critical Findings:**
+
 - 6 HIGH PRIORITY security gaps that must be addressed in requirements
 - 4 MEDIUM PRIORITY gaps for implementation phase
 - Performance target (<100ms) is achievable with proper security controls
@@ -24,6 +25,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **S - Spoofing Identity**
+
 - **Threat:** Attacker impersonates admin user
 - **Attack Vector:** OAuth token theft, session hijacking
 - **Current Mitigation:** httpOnly cookies ✓, 7-day timeout ✓
@@ -32,6 +34,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** HIGH
 
 **T - Tampering with Data**
+
 - **Threat:** Session cookie modification
 - **Attack Vector:** User modifies session cookie to gain/maintain access
 - **Current Mitigation:** None specified
@@ -40,6 +43,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **R - Repudiation**
+
 - **Threat:** Cannot prove who attempted unauthorized access
 - **Attack Vector:** Failed login attempts not logged
 - **Current Mitigation:** Auth event logging mentioned but not detailed
@@ -48,6 +52,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **I - Information Disclosure**
+
 - **Threat:** GitHub service account token exposure
 - **Attack Vector:** Token leaked in logs, error messages, code
 - **Current Mitigation:** Environment variables ✓
@@ -56,12 +61,14 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** HIGH
 
 **D - Denial of Service**
+
 - **Threat:** Brute force login attempts
 - **Current Mitigation:** Rate limiting on auth endpoints ✓
 - **Status:** GOOD - Already specified
 - **Severity:** LOW (mitigated)
 
 **E - Elevation of Privilege**
+
 - **Threat:** Second user gains admin access
 - **Current Mitigation:** System blocks additional users ✓
 - **Status:** GOOD - Already handled
@@ -74,6 +81,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **T - Tampering**
+
 - **Threat:** Malicious PDF upload containing malware
 - **Attack Vector:** PDF contains executable code, exploits
 - **Current Mitigation:** File validation mentioned ✓
@@ -82,6 +90,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** HIGH
 
 **I - Information Disclosure**
+
 - **Threat:** Sensitive information in PDF metadata
 - **Attack Vector:** PDF properties contain PII, internal paths
 - **Current Mitigation:** Metadata extraction ✓
@@ -90,12 +99,14 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **D - Denial of Service**
+
 - **Threat:** Extremely large PDF upload
 - **Current Mitigation:** 500MB file size limit ✓
 - **Status:** GOOD - Already specified
 - **Severity:** LOW (mitigated)
 
 **Injection Attacks**
+
 - **Threat:** Malicious filename (path traversal)
 - **Attack Vector:** Filename like `../../etc/passwd` or `<script>alert()</script>`
 - **Current Mitigation:** None specified
@@ -110,6 +121,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **I - Information Disclosure**
+
 - **Threat:** Google AI API key exposure
 - **Attack Vector:** API keys in logs, error messages, client-side code
 - **Current Mitigation:** Environment variables ✓
@@ -118,6 +130,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** HIGH
 
 **T - Tampering**
+
 - **Threat:** Man-in-the-middle attack on API calls
 - **Attack Vector:** Intercept/modify Google AI API requests
 - **Current Mitigation:** Assumed HTTPS (not specified)
@@ -126,6 +139,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **D - Denial of Service**
+
 - **Threat:** Runaway API usage (cost explosion)
 - **Current Mitigation:** Budget cap ✓, cost preview ✓
 - **Status:** GOOD - Flow 10 handles this well
@@ -138,6 +152,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **Cross-Site Scripting (XSS)**
+
 - **Threat:** Script injection via annotation notes
 - **Attack Vector:** User enters `<script>alert('XSS')</script>` in notes field
 - **Current Mitigation:** Svelte auto-escapes ✓ (per CLAUDE.md)
@@ -146,6 +161,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** HIGH
 
 **Injection**
+
 - **Threat:** Invalid coordinates crash browser or corrupt data
 - **Attack Vector:** Enter coordinates like `-999999` or `NaN` or `Infinity`
 - **Current Mitigation:** None specified
@@ -154,6 +170,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **D - Denial of Service**
+
 - **Threat:** Create thousands of bounding boxes to crash browser
 - **Attack Vector:** Script or manual creation of 10,000+ boxes
 - **Current Mitigation:** None specified (TODO #8 suggests 500 max)
@@ -168,6 +185,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **T - Tampering**
+
 - **Threat:** Admin modifies version history to hide changes
 - **Attack Vector:** Direct git history manipulation
 - **Current Mitigation:** Git immutability ✓
@@ -175,6 +193,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** LOW (mitigated)
 
 **R - Repudiation**
+
 - **Threat:** False attribution of edits
 - **Attack Vector:** Admin claims someone else made the edit
 - **Current Mitigation:** GitHub commit attribution ✓
@@ -183,6 +202,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** LOW (v1 is single user)
 
 **I - Information Disclosure**
+
 - **Threat:** Version data exposed publicly
 - **Current Mitigation:** Private repository ✓
 - **Status:** GOOD - Repository is private
@@ -195,6 +215,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **Injection**
+
 - **Threat:** OCR extracts malicious content from PDF
 - **Attack Vector:** PDF contains `<script>` tags, OCR preserves them
 - **Current Mitigation:** None specified
@@ -203,6 +224,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Severity:** MEDIUM
 
 **Data Integrity**
+
 - **Threat:** Text encoding corruption (Devanagari characters)
 - **Current Mitigation:** UTF-8 everywhere ✓ (CLAUDE.md)
 - **Status:** GOOD - Already specified
@@ -215,6 +237,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **Injection**
+
 - **Threat:** YAML frontmatter injection
 - **Attack Vector:** Special characters in book metadata break YAML parser
 - **Current Mitigation:** None specified
@@ -229,6 +252,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 #### Threats Identified
 
 **E - Elevation of Privilege**
+
 - **Threat:** GitHub service account token compromised
 - **Attack Vector:** Token stolen from environment or logs
 - **Impact:** Full access to all repositories, data loss
@@ -245,11 +269,13 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 ## OWASP Top 10 (2021) Mapping
 
 ### A01: Broken Access Control
+
 - **Status:** ✅ GOOD
 - **Mitigation:** Single user, OAuth, session management, auth checks
 - **Gap:** Need to verify EVERY API endpoint checks authentication
 
 ### A02: Cryptographic Failures
+
 - **Status:** ⚠️ NEEDS WORK
 - **Gaps:**
   - Session encryption not specified
@@ -258,6 +284,7 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Recommendation:** Add cryptographic requirements section
 
 ### A03: Injection
+
 - **Status:** ⚠️ NEEDS WORK
 - **Gaps:**
   - No SQL injection (no SQL database) ✓
@@ -266,10 +293,12 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Recommendation:** Comprehensive input validation requirements
 
 ### A04: Insecure Design
+
 - **Status:** ✅ GOOD
 - **Note:** This threat modeling exercise addresses insecure design!
 
 ### A05: Security Misconfiguration
+
 - **Status:** ❌ CRITICAL GAP
 - **Missing:**
   - Content-Security-Policy (CSP) headers
@@ -280,27 +309,32 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 - **Recommendation:** Add "Security Headers" section to requirements
 
 ### A06: Vulnerable and Outdated Components
+
 - **Status:** ✅ GOOD
 - **Mitigation:** npm audit mentioned in CLAUDE.md ✓
 - **Gap:** Not in REQUIREMENTS-v1.md
 - **Recommendation:** Add to requirements
 
 ### A07: Identification and Authentication Failures
+
 - **Status:** ✅ GOOD
 - **Mitigation:** OAuth ✓, rate limiting ✓, session timeout ✓
 
 ### A08: Software and Data Integrity Failures
+
 - **Status:** ✅ GOOD
 - **Mitigation:** Git provides integrity ✓
 - **Gap:** No SRI (Subresource Integrity) for CDN assets
 - **Recommendation:** Use SRI for any external scripts/styles
 
 ### A09: Security Logging and Monitoring Failures
+
 - **Status:** ⚠️ NEEDS WORK
 - **Gap:** TODO #11 (Logging & Monitoring)
 - **Recommendation:** Specify security event logging
 
 ### A10: Server-Side Request Forgery (SSRF)
+
 - **Status:** ✅ LOW RISK
 - **Note:** Only calls trusted Google AI APIs
 
@@ -311,7 +345,9 @@ This document identifies security threats for all 11 user flows in PageSage v1 u
 ### HIGH PRIORITY (Add to Requirements NOW)
 
 #### 1. Security Headers
+
 **Missing from REQUIREMENTS-v1.md:**
+
 ```
 Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none';
 Strict-Transport-Security: max-age=31536000; includeSubDomains
@@ -322,7 +358,9 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
 #### 2. Input Validation
+
 **Systematically validate:**
+
 - PDF filenames (path traversal prevention)
 - Bounding box coordinates (bounds checking)
 - Annotation notes (XSS prevention)
@@ -330,28 +368,36 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 - OCR output (sanitization)
 
 #### 3. Secrets Management
+
 **Specify:**
+
 - Token rotation policy (90-day maximum)
 - Secrets management tool (Vault, KMS, or SvelteKit $env/static/private)
 - Never log sensitive values
 - Least privilege permissions
 
 #### 4. Audit Logging
+
 **Log security events:**
+
 - Authentication: login, logout, failures, token refresh
 - Authorization: access denied attempts
 - Data changes: all edits (git provides this ✓)
 - Security events: suspicious activity, rate limit hits
 
 #### 5. Rate Limiting
+
 **Apply to:**
+
 - Auth endpoints ✓ (already specified)
 - Upload endpoints (NEW)
 - API endpoints (NEW)
 - Export endpoints (NEW)
 
 #### 6. HTTPS/TLS Enforcement
+
 **Specify:**
+
 - HTTPS required for all connections
 - TLS 1.2+ only
 - Redirect HTTP → HTTPS
@@ -378,6 +424,7 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 ## Security Requirements (v1)
 
 ### Authentication & Authorization
+
 - GitHub OAuth only (no password authentication)
 - Session management: httpOnly, secure, SameSite cookies
 - 7-day session timeout with automatic refresh
@@ -386,6 +433,7 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 - Authorization check on EVERY API endpoint
 
 ### Security Headers
+
 - Content-Security-Policy (CSP)
 - Strict-Transport-Security (HSTS)
 - X-Frame-Options: DENY
@@ -393,36 +441,42 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 - (See security-threat-model.md for full spec)
 
 ### Input Validation
-- PDF filename sanitization (alphanumeric + - _ . only)
+
+- PDF filename sanitization (alphanumeric + - \_ . only)
 - Bounding box coordinate validation (positive, in-bounds)
 - Annotation note sanitization (never use @html)
 - Metadata escaping (YAML-safe)
 - OCR output sanitization (HTML entity encoding)
 
 ### Secrets Management
+
 - All secrets in environment variables
 - Token rotation: 90-day maximum
 - Least privilege GitHub token (repo scope only)
 - Never log sensitive values
 
 ### Audit Logging
+
 - All authentication events
 - Failed authorization attempts
 - Security events (rate limits, suspicious activity)
 - Version history via git (already specified)
 
 ### Network Security
+
 - HTTPS/TLS 1.2+ required
 - Redirect HTTP → HTTPS
 - Secure and httpOnly flags on all cookies
 
 ### File Upload Security
+
 - PDF validation before processing
 - File size limit: 500MB (already specified)
 - Malware scanning (ClamAV or cloud service)
 - Reject executable content
 
 ### Data Security
+
 - UTF-8 encoding everywhere (already specified)
 - Private GitHub repositories only
 - No sensitive data in logs
@@ -450,11 +504,13 @@ Each threat should have corresponding security tests:
 ## Tools & MCPs Recommended
 
 ### During Implementation:
+
 - **SAST:** Semgrep, ESLint security plugins
 - **Dependency Scanning:** npm audit, Snyk
 - **Secret Scanning:** git-secrets, trufflehog
 
 ### Pre-deployment:
+
 - **DAST:** OWASP ZAP
 - **Penetration Testing:** Manual security review
 

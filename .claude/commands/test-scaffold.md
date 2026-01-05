@@ -3,6 +3,7 @@
 You are setting up tests for PageSage with 90% coverage target.
 
 ## Testing Philosophy (from CLAUDE.md)
+
 - **TDD approach**: Write tests BEFORE features
 - **Coverage target**: 90% minimum (95%+ preferred)
 - **Test types**:
@@ -28,8 +29,8 @@ You are setting up tests for PageSage with 90% coverage target.
 3. **Generate test file** with this structure:
 
 ```typescript
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import type { TestSubject } from '$lib/types'
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import type { TestSubject } from "$lib/types";
 
 /**
  * Tests for [describe what's being tested]
@@ -43,113 +44,118 @@ import type { TestSubject } from '$lib/types'
  * - [Special case 2, e.g., multi-line annotations]
  */
 
-describe('[Component/Function Name]', () => {
+describe("[Component/Function Name]", () => {
   // Setup
   beforeEach(() => {
     // Reset mocks, initialize test data
-  })
+  });
 
   afterEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  describe('happy path', () => {
-    it('should [expected behavior]', () => {
+  describe("happy path", () => {
+    it("should [expected behavior]", () => {
       // Arrange
-      const input = createTestData()
+      const input = createTestData();
 
       // Act
-      const result = functionUnderTest(input)
+      const result = functionUnderTest(input);
 
       // Assert
-      expect(result).toEqual(expectedOutput)
-    })
-  })
+      expect(result).toEqual(expectedOutput);
+    });
+  });
 
-  describe('edge cases', () => {
-    it('should handle Sanskrit text with diacritics', () => {
+  describe("edge cases", () => {
+    it("should handle Sanskrit text with diacritics", () => {
       // Test with actual Devanagari characters
-      const sanskritText = 'भगवद्गीता' // Bhagavad Gita
+      const sanskritText = "भगवद्गीता"; // Bhagavad Gita
       // ... test logic
-    })
+    });
 
-    it('should handle empty input gracefully', () => {
+    it("should handle empty input gracefully", () => {
       // ... test logic
-    })
+    });
 
-    it('should validate bounding box coordinates', () => {
+    it("should validate bounding box coordinates", () => {
       // Coordinates must be 0-1 normalized
       // ... test logic
-    })
-  })
+    });
+  });
 
-  describe('error conditions', () => {
-    it('should throw descriptive error for invalid input', () => {
-      expect(() => functionUnderTest(null)).toThrow('Expected non-null input')
-    })
-  })
-})
+  describe("error conditions", () => {
+    it("should throw descriptive error for invalid input", () => {
+      expect(() => functionUnderTest(null)).toThrow("Expected non-null input");
+    });
+  });
+});
 ```
 
 4. **For Integration Tests** (API workflows):
 
 ```typescript
-import { describe, it, expect, vi } from 'vitest'
-import { mockGoogleAI, mockGitHub } from '$tests/mocks'
+import { describe, it, expect, vi } from "vitest";
+import { mockGoogleAI, mockGitHub } from "$tests/mocks";
 
-describe('OCR Pipeline Integration', () => {
-  it('should process page and save to GitHub', async () => {
+describe("OCR Pipeline Integration", () => {
+  it("should process page and save to GitHub", async () => {
     // Mock expensive external APIs
-    const mockOCR = vi.spyOn(mockGoogleAI, 'processDocument')
-    const mockSave = vi.spyOn(mockGitHub, 'commitFile')
+    const mockOCR = vi.spyOn(mockGoogleAI, "processDocument");
+    const mockSave = vi.spyOn(mockGitHub, "commitFile");
 
     mockOCR.mockResolvedValue({
-      text: 'Sample OCR output',
-      confidence: 0.95
-    })
+      text: "Sample OCR output",
+      confidence: 0.95,
+    });
 
     // Test the full workflow without hitting real APIs
-    await ocrPipeline.process(testPDF)
+    await ocrPipeline.process(testPDF);
 
-    expect(mockOCR).toHaveBeenCalledWith(expect.any(Buffer))
+    expect(mockOCR).toHaveBeenCalledWith(expect.any(Buffer));
     expect(mockSave).toHaveBeenCalledWith(
       expect.objectContaining({
         path: expect.stringMatching(/\.json$/),
-        content: expect.stringContaining('Sample OCR output')
-      })
-    )
-  })
-})
+        content: expect.stringContaining("Sample OCR output"),
+      }),
+    );
+  });
+});
 ```
 
 5. **For E2E Tests** (Playwright):
 
 ```typescript
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test";
 
-test.describe('Annotation Workflow', () => {
-  test('should upload, process, annotate, and export book', async ({ page }) => {
+test.describe("Annotation Workflow", () => {
+  test("should upload, process, annotate, and export book", async ({
+    page,
+  }) => {
     // Navigate to app
-    await page.goto('/')
+    await page.goto("/");
 
     // Upload PDF
-    await page.setInputFiles('[data-testid="file-upload"]', './fixtures/sample-book.pdf')
+    await page.setInputFiles(
+      '[data-testid="file-upload"]',
+      "./fixtures/sample-book.pdf",
+    );
 
     // Wait for processing
-    await page.waitForSelector('[data-testid="annotation-editor"]')
+    await page.waitForSelector('[data-testid="annotation-editor"]');
 
     // Edit annotation
-    await page.click('[data-testid="annotation-0"]')
-    await page.fill('[data-testid="text-editor"]', 'Corrected text')
+    await page.click('[data-testid="annotation-0"]');
+    await page.fill('[data-testid="text-editor"]', "Corrected text");
 
     // Export
-    await page.click('[data-testid="export-markdown"]')
+    await page.click('[data-testid="export-markdown"]');
 
     // Verify download
-    const download = await page.waitForEvent('download')
-    expect(download.suggestedFilename()).toMatch(/\.md$/)
-  })
-})
+    const download = await page.waitForEvent("download");
+    expect(download.suggestedFilename()).toMatch(/\.md$/);
+  });
+});
 ```
 
 6. **PageSage-specific test data**:
@@ -179,6 +185,7 @@ test.describe('Annotation Workflow', () => {
    ```
 
 ## Output
+
 - Create test file mirroring source structure
 - Add test data fixtures if needed
 - Ensure mocks are reusable

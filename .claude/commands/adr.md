@@ -3,7 +3,9 @@
 You are creating a new Architecture Decision Record (ADR) for the PageSage project.
 
 ## Context
+
 PageSage is an Ancient Text OCR & Annotation Platform using:
+
 - SvelteKit + TypeScript
 - GitHub for storage and authentication
 - Google Document AI for OCR
@@ -36,6 +38,7 @@ PageSage is an Ancient Text OCR & Annotation Platform using:
 ## Rationale
 
 [Explain why this decision was made, including:]
+
 - What alternatives were considered
 - Why this option was chosen
 - Trade-offs and implications
@@ -44,14 +47,17 @@ PageSage is an Ancient Text OCR & Annotation Platform using:
 ## Consequences
 
 ### Positive
+
 - [Benefit 1]
 - [Benefit 2]
 
 ### Negative
+
 - [Risk or limitation 1]
 - [Risk or limitation 2]
 
 ### Neutral
+
 - [Other implications]
 
 ## Implementation Notes
@@ -79,6 +85,7 @@ PageSage is an Ancient Text OCR & Annotation Platform using:
 5. **Save the file** and confirm creation
 
 ## Notes
+
 - Keep it concise but thorough
 - Focus on WHY, not just WHAT
 - Document alternatives considered

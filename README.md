@@ -7,6 +7,7 @@ A collaborative platform for digitizing Sanskrit, Hindi, and English multi-langu
 ## 🎯 Overview
 
 PageSage enables scholars, researchers, and volunteers to:
+
 - Upload PDF scans of ancient texts
 - Process with Google Document AI / Gemini for OCR and layout detection
 - Manually review and correct AI-generated annotations
@@ -14,6 +15,7 @@ PageSage enables scholars, researchers, and volunteers to:
 - Export to various formats (HOCR, Plain Text, Markdown, JSON)
 
 **Key Features:**
+
 - Multi-language support (Sanskrit, Hindi, English)
 - Cost-aware API usage with transparency
 - Git-friendly plain-text storage
@@ -23,6 +25,7 @@ PageSage enables scholars, researchers, and volunteers to:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - macOS (primary dev platform)
 - Node.js 18+
 - Homebrew
@@ -62,23 +65,25 @@ For detailed setup instructions, see [Development Setup Guide](docs/development-
 ## 📚 Documentation
 
 ### Requirements & Planning
-- **[REQUIREMENTS-v1.md](REQUIREMENTS-v1.md)** - v1.0 Single User Tool (current focus)
-- **[REQUIREMENTS-v2.md](REQUIREMENTS-v2.md)** - v2.0 Multi-User Collaboration (future)
-- **[System Modules](docs/system-modules.md)** - Functional module breakdown
+
+- **[REQUIREMENTS.md](REQUIREMENTS.md)** ⭐ - Complete requirements & implementation plan (START HERE)
+- **[docs/](docs/)** - Architecture, schemas, use cases, and detailed specs
+- **[docs/README.md](docs/README.md)** - Documentation index and navigation
 
 ### Development
+
 - **[Development Setup](docs/development-setup.md)** - Environment setup guide
 - **[Quick Reference](docs/quick-reference.md)** - Commands and shortcuts
 - **[Coding Conventions](CLAUDE.md)** - Code style, testing, Git workflow
 
 ## 🛠️ Tech Stack
 
-- **Frontend & Backend**: SvelteKit + TypeScript
-- **Storage**: GitHub (plain text, version controlled)
+- **Frontend & Backend**: SvelteKit (Svelte 5) + TypeScript
+- **Deployment**: Cloudflare Pages + GitHub Actions (free tier)
+- **Storage**: Cloudflare R2 (binary) + GitHub (metadata)
 - **Authentication**: GitHub OAuth
-- **OCR/AI**: Google Document AI + Gemini
-- **Testing**: Vitest (80%+ coverage required)
-- **Deployment**: TBD (Vercel, Netlify, or self-hosted)
+- **OCR/AI**: Google Document AI or Gemini 2.5 Flash
+- **Testing**: Vitest (90%+ coverage target)
 
 ## 📦 Project Structure
 
@@ -128,10 +133,12 @@ npm run validate         # All checks + build
 PageSage development follows a version-as-theme approach:
 
 ### **v1.0 - Solo User MVP** (Current)
+
 **Theme**: Personal OCR tool for single user
 **Status**: In Development
 
 **Core Features**:
+
 - Project management (create, organize books)
 - PDF upload & processing
 - AI-powered layout detection
@@ -143,15 +150,17 @@ PageSage development follows a version-as-theme approach:
 
 **Focus**: Get core workflow perfect before adding collaboration
 
-See [REQUIREMENTS-v1.md](REQUIREMENTS-v1.md) for complete specifications.
+See [REQUIREMENTS.md](REQUIREMENTS.md) for complete specifications.
 
 ---
 
 ### **v2.0 - Multi-User Collaboration** (Future)
+
 **Theme**: Enable team-based digitization
 **Depends On**: v1.0 complete
 
 **Additions**:
+
 - User authentication (GitHub OAuth)
 - Role-based permissions (Admin, Editor, Reviewer, Viewer)
 - User provisioning (manual + invitation)
@@ -165,10 +174,12 @@ See [REQUIREMENTS-v2.md](REQUIREMENTS-v2.md) for complete specifications.
 ---
 
 ### **v3.0 - Advanced Features** (Conceptual)
+
 **Theme**: Analytics, optimization, integrations
 **Depends On**: v2.0 complete
 
 **Potential Features**:
+
 - Cross-book search
 - OCR quality dashboards
 - Cost optimization recommendations
@@ -203,6 +214,14 @@ See [REQUIREMENTS-v2.md](REQUIREMENTS-v2.md) for complete specifications.
 - Regular dependency security audits
 
 See [CLAUDE.md](CLAUDE.md) for detailed security practices.
+
+## 🌐 Deployment
+
+**Production:** https://pagesage.app (Cloudflare Pages)
+**Repository:** Public on GitHub (enables free CodeQL security scanning)
+**Status:** In development
+
+---
 
 ## 📄 License
 

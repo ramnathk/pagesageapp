@@ -15,6 +15,7 @@ PageSage needs to store two types of data:
 2. **Immutable assets**: PDFs (up to 500MB), page images (1000+ images @ 1-5MB each)
 
 **Constraints:**
+
 - GitHub has 100MB per-file limit and ~5GB practical repo size limit
 - Large books can total 2-5GB (PDF + images)
 - Cost sensitivity (admin pays all costs)
@@ -37,12 +38,15 @@ PageSage needs to store two types of data:
 ## Considered Options
 
 ### Option 1: GitHub LFS (Large File Storage)
+
 **Pros:**
+
 - Everything in one place (GitHub)
 - True version control for images
 - Integrated with git workflow
 
 **Cons:**
+
 - ❌ **Expensive**: $5/month for 50GB (after 1GB free)
 - ❌ **Complex**: Requires LFS client setup
 - ❌ **Overkill**: Don't need version history for immutable images
@@ -50,12 +54,15 @@ PageSage needs to store two types of data:
 **Cost:** $5/month for 50GB = **$0.10/GB/month**
 
 ### Option 2: AWS S3
+
 **Pros:**
+
 - Industry standard
 - Reliable, scalable
 - Good performance
 
 **Cons:**
+
 - ❌ **No free tier** (beyond 12-month trial)
 - ❌ **More expensive**: $0.023/GB/month
 - ❌ **Requires AWS account** (separate from Google AI setup)
@@ -63,7 +70,9 @@ PageSage needs to store two types of data:
 **Cost:** $0.023/GB/month, no permanent free tier
 
 ### Option 3: Google Cloud Storage (GCS)
+
 **Pros:**
+
 - Designed for app storage
 - Fast, CDN-backed
 - Same GCP project as Google AI APIs
@@ -71,13 +80,16 @@ PageSage needs to store two types of data:
 - 5GB always-free tier
 
 **Cons:**
+
 - ❌ **Smaller free tier**: 5GB vs 15GB (Google Drive)
 - Requires GCP setup
 
 **Cost:** 5GB free, then $0.02/GB/month = **$2/100GB**
 
 ### Option 4: Google Drive ✅ **SELECTED**
+
 **Pros:**
+
 - ✅ **Largest free tier**: 15GB (3x more than GCS)
 - ✅ **Cost-effective**: $1.99/100GB after free tier (~same as GCS)
 - ✅ **Simple setup**: OAuth, familiar interface
@@ -85,6 +97,7 @@ PageSage needs to store two types of data:
 - ✅ **v1-appropriate**: Perfect for personal use, single user
 
 **Cons:**
+
 - ⚠️ **Rate limits**: 1000 requests/100sec (acceptable for single-user v1)
 - ⚠️ **Not designed for apps**: But fine for personal/low-volume use
 - ⚠️ **API complexity**: Folder hierarchy vs flat storage
@@ -92,7 +105,9 @@ PageSage needs to store two types of data:
 **Cost:** 15GB free (~6 large books), then $1.99/month for 100GB
 
 ### Option 5: Local Filesystem
+
 **Cons:**
+
 - ❌ Not portable
 - ❌ No sharing/collaboration
 - ❌ Rejected immediately
@@ -106,6 +121,7 @@ PageSage needs to store two types of data:
 ### Architecture
 
 **GitHub repositories (free, unlimited):**
+
 ```
 github.com/{org}/pagesage-project-{id}/
 ├── metadata.json           # Project metadata
@@ -120,6 +136,7 @@ github.com/{org}/pagesage-project-{id}/
 ```
 
 **Google Drive folder (15GB free):**
+
 ```
 Google Drive/PageSage/
 ├── project-{id}/
@@ -161,14 +178,17 @@ Given 15GB free tier on Google Drive:
 ### Cost Projection
 
 **Scenario 1: Light use (1-5 books)**
+
 - Storage: <15GB
 - **Cost: $0/month** ✨
 
 **Scenario 2: Moderate use (6-20 books)**
+
 - Storage: 15-50GB
 - **Cost: $1.99/month** (100GB tier)
 
 **Scenario 3: Heavy use (50+ books)**
+
 - Storage: 100GB+
 - **Cost: $1.99/month** (still 100GB tier)
 - Consider migrating to GCS if exceeding 100GB

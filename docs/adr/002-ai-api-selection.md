@@ -10,15 +10,18 @@
 ## Context and Problem Statement
 
 PageSage needs AI services for:
+
 1. **Layout detection** - Identify bounding boxes, columns, footnotes, reading order
 2. **OCR text extraction** - Extract text in Devanagari, IAST, and English
 3. **Language detection** - Classify text by language/script
 
 **Sample complexity ranges from:**
+
 - **Simple:** Single-column Sanskrit with Hindi commentary
 - **Complex:** Multi-column with extensive footnotes, parallel text, index pages (2-4 columns)
 
 **Key requirements:**
+
 - Multi-column layout detection (2-4 columns)
 - Precise bounding box coordinates (pixel-level)
 - Footnote detection and classification
@@ -43,6 +46,7 @@ PageSage needs AI services for:
 ### Option 1: Google Document AI Layout Parser
 
 **Capabilities:**
+
 - Specialized document layout processor
 - Extracts text, tables, lists with structure
 - Context-aware chunking
@@ -50,11 +54,13 @@ PageSage needs AI services for:
 - Precise bounding box coordinates
 
 **Pricing:**
+
 - $10 per 1,000 pages (no volume discount)
 - 700-page book: **$7.00**
 - 10 books/year: **$70.00**
 
 **Pros:**
+
 - ✅ Purpose-built for complex document layouts
 - ✅ Multi-column detection is core feature
 - ✅ Proven accuracy for documents
@@ -64,6 +70,7 @@ PageSage needs AI services for:
 - ✅ Devanagari support confirmed
 
 **Cons:**
+
 - ❌ Expensive ($7/book)
 - ❌ No free tier (only $300 credit for new customers)
 - ❌ More complex setup
@@ -75,6 +82,7 @@ PageSage needs AI services for:
 ### Option 2: Gemini 2.5 Flash
 
 **Capabilities:**
+
 - Modern vision model with document understanding
 - Built-in OCR (95%+ accuracy for printed text)
 - Layout analysis (general-purpose)
@@ -82,12 +90,14 @@ PageSage needs AI services for:
 - Bounding box detection
 
 **Pricing:**
+
 - FREE tier (rate-limited)
 - Paid: $0.30 per 1M tokens
 - 700-page book: **$0.27** (paid tier) or **$0.00** (free tier)
 - 10 books/year: **$2.70** or **$0.00**
 
 **Pros:**
+
 - ✅ FREE tier available
 - ✅ 26x cheaper than Document AI Layout Parser
 - ✅ Modern vision model (2024)
@@ -96,6 +106,7 @@ PageSage needs AI services for:
 - ✅ Likely supports Devanagari (100+ languages)
 
 **Cons:**
+
 - ⚠️ **Unproven for complex Sanskrit layouts**
 - ⚠️ General vision model (not document-specialized)
 - ⚠️ Unknown multi-column detection quality
@@ -109,22 +120,26 @@ PageSage needs AI services for:
 ### Option 3: Gemini 2.0 Flash
 
 **Capabilities:**
+
 - Similar to 2.5 but lower quality
 - Good for simple documents
 - Fast, efficient
 
 **Pricing:**
+
 - FREE tier
 - Paid: $0.10 per 1M tokens
 - 700-page book: **$0.09** or **$0.00**
 - 10 books/year: **$0.90** or **$0.00**
 
 **Pros:**
+
 - ✅ FREE tier
 - ✅ 78x cheaper than Document AI
 - ✅ Fast
 
 **Cons:**
+
 - ⚠️ Lower quality than 2.5 Flash
 - ⚠️ May struggle with complex layouts
 
@@ -135,22 +150,26 @@ PageSage needs AI services for:
 ### Option 4: Claude Sonnet 4.5
 
 **Capabilities:**
+
 - Best semantic understanding
 - Multimodal vision
 - Complex reasoning
 - Flexible instructions
 
 **Pricing:**
+
 - ~$3 per 1M input tokens
 - 700-page book: **~$3.00**
 - 10 books/year: **~$30.00**
 
 **Pros:**
+
 - ✅ Best understanding of semantic relationships
 - ✅ Can distinguish IAST from emphasis
 - ✅ Excellent for edge cases
 
 **Cons:**
+
 - ❌ No pixel-precise coordinates
 - ❌ Not designed for batch processing
 - ❌ Slower than specialized APIs
@@ -166,6 +185,7 @@ PageSage needs AI services for:
 ### Recommended Testing Approach
 
 **Phase 1: Test Gemini 2.5 Flash** (1-2 hours)
+
 - Process both samples (simple + complex)
 - Validate multi-column detection
 - Check footnote detection and linking
@@ -175,11 +195,13 @@ PageSage needs AI services for:
 **Phase 2: Decision**
 
 **IF** Gemini 2.5 achieves ≥90% accuracy on complex layouts:
+
 - **Use Gemini 2.5 Flash** as primary API
 - Save $67/year compared to Document AI
 - Accept slightly lower quality for massive cost savings
 
 **IF** Gemini 2.5 achieves <90% accuracy:
+
 - **Use Document AI Layout Parser** for complex texts
 - **Use Gemini 2.0** for simple texts (hybrid approach)
 - Blended cost: ~$2-3/book average
@@ -193,6 +215,7 @@ PageSage needs AI services for:
 ### If Gemini 2.5 Flash Works Well
 
 **Positive:**
+
 - ✅ Near-zero API costs ($0-2.70/year)
 - ✅ FREE tier for testing and low volume
 - ✅ Simple integration (one API)
@@ -200,6 +223,7 @@ PageSage needs AI services for:
 - ✅ Budget available for other features
 
 **Negative:**
+
 - ⚠️ Risk of lower quality (needs more manual correction)
 - ⚠️ Unproven for Sanskrit specifically
 - ⚠️ May need fallback for complex pages
@@ -207,6 +231,7 @@ PageSage needs AI services for:
 ### If Document AI Required
 
 **Positive:**
+
 - ✅ Proven quality for complex layouts
 - ✅ Specialized for documents
 - ✅ Reliable, production-ready
@@ -214,6 +239,7 @@ PageSage needs AI services for:
 - ✅ Still within budget ($70/year < $120 budget)
 
 **Negative:**
+
 - ❌ Higher API costs (26x more than Gemini)
 - ❌ Less budget for storage/hosting
 - ❌ No free tier for testing
@@ -265,14 +291,14 @@ ANTHROPIC_API_KEY=
 ```typescript
 // Project-level configuration
 interface ProjectSettings {
-  layoutComplexity: 'simple' | 'complex';
-  preferredApi: 'gemini' | 'document-ai' | 'auto';
+  layoutComplexity: "simple" | "complex";
+  preferredApi: "gemini" | "document-ai" | "auto";
 }
 
 async function processPage(page: Page, project: Project): Promise<Annotations> {
-  if (project.settings.preferredApi === 'auto') {
+  if (project.settings.preferredApi === "auto") {
     // Auto-select based on complexity
-    if (project.settings.layoutComplexity === 'simple') {
+    if (project.settings.layoutComplexity === "simple") {
       return await gemini.process(page);
     } else {
       return await documentAI.process(page);

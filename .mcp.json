@@ -9,27 +9,18 @@
     },
     "thoughtbox": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@kastalien-research/thoughtbox"
-      ]
+      "args": ["-y", "@kastalien-research/thoughtbox"]
     },
     "svelte": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "@sveltejs/mcp"
-      ],
+      "args": ["-y", "@sveltejs/mcp"],
       "env": {}
     },
     "vitest-runner": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "@madrus/vitest-mcp-server@latest"
-      ],
+      "args": ["-y", "@madrus/vitest-mcp-server@latest"],
       "env": {
         "VITEST_PROJECT_DIR": "/Users/kramnat/projects/yamlManager"
       }

@@ -14,6 +14,7 @@ This document details how to analyze PDF scan quality to intelligently decide if
 **Solution:** Analyze sample pages from the **middle of the book** to determine quality and recommend preprocessing.
 
 **Why middle pages?**
+
 - ❌ First 5 pages: Often covers, title pages, publisher info (different quality)
 - ✅ Middle 5 pages: Actual book content (representative of what needs OCR)
 
@@ -28,21 +29,21 @@ async function getSamplePageNumbers(pdfPath: string): Promise<number[]> {
   const pageCountMatch = stdout.match(/Pages:\s+(\d+)/);
 
   if (!pageCountMatch) {
-    throw new Error('Could not determine PDF page count');
+    throw new Error("Could not determine PDF page count");
   }
 
   const totalPages = parseInt(pageCountMatch[1]);
 
   // 2. Sample 5 pages distributed through middle section
   // Skip first 10% and last 10% (intro/appendix material)
-  const startPage = Math.ceil(totalPages * 0.1);  // 10% in
-  const endPage = Math.floor(totalPages * 0.9);   // 90% in
+  const startPage = Math.ceil(totalPages * 0.1); // 10% in
+  const endPage = Math.floor(totalPages * 0.9); // 90% in
   const middleRange = endPage - startPage;
 
   // Sample at 25%, 40%, 50%, 60%, 75% through the content section
-  const samplePositions = [0.25, 0.40, 0.50, 0.60, 0.75];
-  const samplePages = samplePositions.map(pos =>
-    Math.floor(startPage + middleRange * pos)
+  const samplePositions = [0.25, 0.4, 0.5, 0.6, 0.75];
+  const samplePages = samplePositions.map((pos) =>
+    Math.floor(startPage + middleRange * pos),
   );
 
   return samplePages;
@@ -59,10 +60,10 @@ async function getSamplePageNumbers(pdfPath: string): Promise<number[]> {
 
 ```typescript
 interface QualityCheckResult {
-  recommendation: 'skip' | 'optional' | 'recommended';
-  quality: 'excellent' | 'good' | 'fair' | 'poor';
+  recommendation: "skip" | "optional" | "recommended";
+  quality: "excellent" | "good" | "fair" | "poor";
   timeSavings: string | null;
-  confidence: 'high' | 'medium' | 'low';
+  confidence: "high" | "medium" | "low";
   details: {
     pagesAnalyzed: number[];
     totalPages: number;
@@ -81,7 +82,7 @@ async function quickQualityCheck(pdfPath: string): Promise<QualityCheckResult> {
   const samplePages = await getSamplePageNumbers(pdfPath);
   const totalPages = await getTotalPages(pdfPath);
 
-  console.log(`Analyzing pages ${samplePages.join(', ')} of ${totalPages}...`);
+  console.log(`Analyzing pages ${samplePages.join(", ")} of ${totalPages}...`);
 
   // 2. Extract only those specific pages
   const tempDir = `/tmp/quality-check-${Date.now()}`;
@@ -94,7 +95,7 @@ async function quickQualityCheck(pdfPath: string): Promise<QualityCheckResult> {
 
     // Extract single page at 300 DPI
     await execAsync(
-      `pdftoppm -png -r 300 -f ${pageNum} -l ${pageNum} "${pdfPath}" "${tempDir}/page"`
+      `pdftoppm -png -r 300 -f ${pageNum} -l ${pageNum} "${pdfPath}" "${tempDir}/page"`,
     );
 
     // pdftoppm creates: page-1.png (numbered from extraction start)
@@ -106,20 +107,22 @@ async function quickQualityCheck(pdfPath: string): Promise<QualityCheckResult> {
   }
 
   // 3. Analyze each sample page in parallel
-  const analyses = await Promise.all(
-    extractedFiles.map(analyzeImageQuality)
-  );
+  const analyses = await Promise.all(extractedFiles.map(analyzeImageQuality));
 
   // 4. Aggregate results
-  const pagesNeedingPreprocessing = analyses.filter(a => a.needsPreprocessing).length;
-  const avgIssuesPerPage = analyses.reduce((sum, a) => sum + a.issueCount, 0) / analyses.length;
+  const pagesNeedingPreprocessing = analyses.filter(
+    (a) => a.needsPreprocessing,
+  ).length;
+  const avgIssuesPerPage =
+    analyses.reduce((sum, a) => sum + a.issueCount, 0) / analyses.length;
 
   // Identify common issues across pages
   const issueFrequency = {
-    skew: analyses.filter(a => a.recommendedOperations.deskew).length,
-    contrast: analyses.filter(a => a.recommendedOperations.colorCorrect).length,
-    noise: analyses.filter(a => a.recommendedOperations.denoise).length,
-    borders: analyses.filter(a => a.recommendedOperations.crop).length
+    skew: analyses.filter((a) => a.recommendedOperations.deskew).length,
+    contrast: analyses.filter((a) => a.recommendedOperations.colorCorrect)
+      .length,
+    noise: analyses.filter((a) => a.recommendedOperations.denoise).length,
+    borders: analyses.filter((a) => a.recommendedOperations.crop).length,
   };
 
   const commonIssues = Object.entries(issueFrequency)
@@ -127,50 +130,51 @@ async function quickQualityCheck(pdfPath: string): Promise<QualityCheckResult> {
     .map(([issue]) => issue);
 
   // 5. Make recommendation
-  let recommendation: 'skip' | 'optional' | 'recommended';
-  let quality: 'excellent' | 'good' | 'fair' | 'poor';
-  let confidence: 'high' | 'medium' | 'low';
+  let recommendation: "skip" | "optional" | "recommended";
+  let quality: "excellent" | "good" | "fair" | "poor";
+  let confidence: "high" | "medium" | "low";
   let message: string;
   let timeSavings: string | null = null;
 
   if (pagesNeedingPreprocessing === 0) {
-    recommendation = 'skip';
-    quality = 'excellent';
-    confidence = 'high';
-    timeSavings = '~15 minutes';
-    message = `✅ Excellent scan quality! All ${analyses.length} sample pages are clean. ` +
-              `Preprocessing not needed - saves 15 minutes.`;
-
+    recommendation = "skip";
+    quality = "excellent";
+    confidence = "high";
+    timeSavings = "~15 minutes";
+    message =
+      `✅ Excellent scan quality! All ${analyses.length} sample pages are clean. ` +
+      `Preprocessing not needed - saves 15 minutes.`;
   } else if (pagesNeedingPreprocessing === 1) {
-    recommendation = 'optional';
-    quality = 'good';
-    confidence = 'high';
-    message = `✓ Good quality. Only 1/${analyses.length} pages needs preprocessing. ` +
-              `Optional - preprocessing may slightly improve OCR accuracy.`;
-
+    recommendation = "optional";
+    quality = "good";
+    confidence = "high";
+    message =
+      `✓ Good quality. Only 1/${analyses.length} pages needs preprocessing. ` +
+      `Optional - preprocessing may slightly improve OCR accuracy.`;
   } else if (pagesNeedingPreprocessing === 2) {
-    recommendation = 'optional';
-    quality = 'good';
-    confidence = 'medium';
-    message = `⚠️ Fair quality. ${pagesNeedingPreprocessing}/${analyses.length} pages need preprocessing. ` +
-              `Common issues: ${commonIssues.join(', ')}. ` +
-              `Recommended for best OCR results.`;
-
+    recommendation = "optional";
+    quality = "good";
+    confidence = "medium";
+    message =
+      `⚠️ Fair quality. ${pagesNeedingPreprocessing}/${analyses.length} pages need preprocessing. ` +
+      `Common issues: ${commonIssues.join(", ")}. ` +
+      `Recommended for best OCR results.`;
   } else if (pagesNeedingPreprocessing <= 3) {
-    recommendation = 'recommended';
-    quality = 'fair';
-    confidence = 'high';
-    message = `⚠️ Multiple quality issues found in ${pagesNeedingPreprocessing}/${analyses.length} pages. ` +
-              `Issues: ${commonIssues.join(', ')}. ` +
-              `Preprocessing strongly recommended for accurate OCR.`;
-
+    recommendation = "recommended";
+    quality = "fair";
+    confidence = "high";
+    message =
+      `⚠️ Multiple quality issues found in ${pagesNeedingPreprocessing}/${analyses.length} pages. ` +
+      `Issues: ${commonIssues.join(", ")}. ` +
+      `Preprocessing strongly recommended for accurate OCR.`;
   } else {
-    recommendation = 'recommended';
-    quality = 'poor';
-    confidence = 'high';
-    message = `🔴 Poor scan quality. ${pagesNeedingPreprocessing}/${analyses.length} pages need correction. ` +
-              `Issues: ${commonIssues.join(', ')}. ` +
-              `Preprocessing essential for usable OCR results.`;
+    recommendation = "recommended";
+    quality = "poor";
+    confidence = "high";
+    message =
+      `🔴 Poor scan quality. ${pagesNeedingPreprocessing}/${analyses.length} pages need correction. ` +
+      `Issues: ${commonIssues.join(", ")}. ` +
+      `Preprocessing essential for usable OCR results.`;
   }
 
   // 6. Cleanup
@@ -189,10 +193,10 @@ async function quickQualityCheck(pdfPath: string): Promise<QualityCheckResult> {
       totalPages,
       pagesNeedingPreprocessing,
       avgIssuesPerPage: parseFloat(avgIssuesPerPage.toFixed(1)),
-      commonIssues
+      commonIssues,
     },
     message,
-    analyses
+    analyses,
   };
 }
 ```
@@ -210,7 +214,7 @@ async function detectSkewAngle(imagePath: string): Promise<number> {
 
   try {
     const { stderr } = await execAsync(
-      `convert "${imagePath}" -deskew 40% -verbose "${tempOutput}" 2>&1`
+      `convert "${imagePath}" -deskew 40% -verbose "${tempOutput}" 2>&1`,
     );
 
     // Parse: "Deskew: 2.34 degrees"
@@ -220,7 +224,6 @@ async function detectSkewAngle(imagePath: string): Promise<number> {
     await fs.unlink(tempOutput).catch(() => {}); // Cleanup
 
     return Math.abs(angle);
-
   } catch (error) {
     return 0; // Assume no skew if detection fails
   }
@@ -239,9 +242,7 @@ async function detectSkewAngle(imagePath: string): Promise<number> {
 
 ```typescript
 async function analyzeContrast(imagePath: string): Promise<number> {
-  const { channels } = await sharp(imagePath)
-    .greyscale()
-    .stats();
+  const { channels } = await sharp(imagePath).greyscale().stats();
 
   const channel = channels[0];
 
@@ -265,9 +266,7 @@ async function analyzeContrast(imagePath: string): Promise<number> {
 
 ```typescript
 async function analyzeBrightness(imagePath: string): Promise<number> {
-  const { channels } = await sharp(imagePath)
-    .greyscale()
-    .stats();
+  const { channels } = await sharp(imagePath).greyscale().stats();
 
   // Brightness = mean pixel value normalized to 0-1
   const brightness = channels[0].mean / 255;
@@ -288,9 +287,7 @@ async function analyzeBrightness(imagePath: string): Promise<number> {
 
 ```typescript
 async function analyzeNoise(imagePath: string): Promise<number> {
-  const { channels } = await sharp(imagePath)
-    .greyscale()
-    .stats();
+  const { channels } = await sharp(imagePath).greyscale().stats();
 
   // Noise ≈ standard deviation of pixel values
   // (simplified - works well for scanned documents)
@@ -328,7 +325,8 @@ async function detectBorders(imagePath: string): Promise<{
 
   // Top border
   let topBorder = 0;
-  for (let y = 0; y < height * 0.2; y++) { // Check first 20%
+  for (let y = 0; y < height * 0.2; y++) {
+    // Check first 20%
     let whitePixels = 0;
     for (let x = 0; x < width; x++) {
       if (data[y * width + x] > threshold) whitePixels++;
@@ -344,12 +342,11 @@ async function detectBorders(imagePath: string): Promise<{
     top: topBorder,
     right: 0, // simplified
     bottom: 0,
-    left: 0
+    left: 0,
   };
 
   // Has borders if any edge > 5% of dimension
-  const hasBorders =
-    topBorder > height * 0.05;
+  const hasBorders = topBorder > height * 0.05;
 
   return { hasBorders, borderSizes };
 }
@@ -375,7 +372,7 @@ interface ImageQualityMetrics {
 }
 
 interface QualityAssessment extends ImageQualityMetrics {
-  overallQuality: 'excellent' | 'good' | 'fair' | 'poor';
+  overallQuality: "excellent" | "good" | "fair" | "poor";
   needsPreprocessing: boolean;
   recommendedOperations: {
     deskew: boolean;
@@ -385,7 +382,7 @@ interface QualityAssessment extends ImageQualityMetrics {
   };
   issueCount: number;
   scores: {
-    skew: number;      // 0-100 (100 = perfect)
+    skew: number; // 0-100 (100 = perfect)
     contrast: number;
     brightness: number;
     noise: number;
@@ -393,23 +390,26 @@ interface QualityAssessment extends ImageQualityMetrics {
   };
 }
 
-async function analyzeImageQuality(imagePath: string): Promise<QualityAssessment> {
+async function analyzeImageQuality(
+  imagePath: string,
+): Promise<QualityAssessment> {
   // Run all analyses in parallel for speed
-  const [skewAngle, contrast, brightness, noiseLevel, borderInfo] = await Promise.all([
-    detectSkewAngle(imagePath),
-    analyzeContrast(imagePath),
-    analyzeBrightness(imagePath),
-    analyzeNoise(imagePath),
-    detectBorders(imagePath)
-  ]);
+  const [skewAngle, contrast, brightness, noiseLevel, borderInfo] =
+    await Promise.all([
+      detectSkewAngle(imagePath),
+      analyzeContrast(imagePath),
+      analyzeBrightness(imagePath),
+      analyzeNoise(imagePath),
+      detectBorders(imagePath),
+    ]);
 
   // Calculate scores (0-100, higher is better)
   const scores = {
-    skew: Math.max(0, 100 - skewAngle * 50),      // 0° = 100, 2° = 0
-    contrast: contrast * 100,                       // 0.7+ = 70+
-    brightness: brightnessScore(brightness),        // 0.5-0.7 = 100
-    noise: Math.max(0, 100 - noiseLevel * 500),    // 0.05 = 75, 0 = 100
-    borders: borderInfo.hasBorders ? 50 : 100      // Has borders = 50
+    skew: Math.max(0, 100 - skewAngle * 50), // 0° = 100, 2° = 0
+    contrast: contrast * 100, // 0.7+ = 70+
+    brightness: brightnessScore(brightness), // 0.5-0.7 = 100
+    noise: Math.max(0, 100 - noiseLevel * 500), // 0.05 = 75, 0 = 100
+    borders: borderInfo.hasBorders ? 50 : 100, // Has borders = 50
   };
 
   // Determine which operations are needed
@@ -417,17 +417,17 @@ async function analyzeImageQuality(imagePath: string): Promise<QualityAssessment
     deskew: skewAngle > 0.5,
     colorCorrect: contrast < 0.5 || brightness < 0.4 || brightness > 0.8,
     denoise: noiseLevel > 0.15,
-    crop: borderInfo.hasBorders
+    crop: borderInfo.hasBorders,
   };
 
-  const issueCount = Object.values(recommended).filter(v => v).length;
+  const issueCount = Object.values(recommended).filter((v) => v).length;
 
   // Overall quality
-  let overallQuality: 'excellent' | 'good' | 'fair' | 'poor';
-  if (issueCount === 0) overallQuality = 'excellent';
-  else if (issueCount === 1) overallQuality = 'good';
-  else if (issueCount === 2) overallQuality = 'fair';
-  else overallQuality = 'poor';
+  let overallQuality: "excellent" | "good" | "fair" | "poor";
+  if (issueCount === 0) overallQuality = "excellent";
+  else if (issueCount === 1) overallQuality = "good";
+  else if (issueCount === 2) overallQuality = "fair";
+  else overallQuality = "poor";
 
   const needsPreprocessing = issueCount >= 2;
 
@@ -442,7 +442,7 @@ async function analyzeImageQuality(imagePath: string): Promise<QualityAssessment
     needsPreprocessing,
     recommendedOperations: recommended,
     issueCount,
-    scores
+    scores,
   };
 }
 
@@ -455,7 +455,7 @@ function brightnessScore(brightness: number): number {
   if (brightness >= 0.4 && brightness <= 0.8) {
     const distFromIdeal = Math.min(
       Math.abs(brightness - 0.5),
-      Math.abs(brightness - 0.7)
+      Math.abs(brightness - 0.7),
     );
     return 100 - distFromIdeal * 200; // 0.1 away = 80
   }
@@ -601,6 +601,7 @@ function brightnessScore(brightness: number): number {
 ## Performance
 
 **Time breakdown (700-page PDF):**
+
 - Get page count: ~1 second
 - Calculate sample pages: < 1ms
 - Extract 5 pages: ~5-8 seconds
@@ -616,8 +617,8 @@ function brightnessScore(brightness: number): number {
 ```typescript
 // Test with actual project samples
 const samples = [
-  './sample files/san with hindi-ch4 mahanirvana.pdf',
-  './sample files/kalika few pgs.pdf'
+  "./sample files/san with hindi-ch4 mahanirvana.pdf",
+  "./sample files/kalika few pgs.pdf",
 ];
 
 for (const samplePath of samples) {
@@ -629,9 +630,11 @@ for (const samplePath of samples) {
   console.log(`Recommendation: ${result.recommendation}`);
   console.log(`Message: ${result.message}`);
   console.log(`\nDetails:`);
-  console.log(`  Pages analyzed: ${result.details.pagesAnalyzed.join(', ')}`);
-  console.log(`  Pages needing work: ${result.details.pagesNeedingPreprocessing}/5`);
-  console.log(`  Common issues: ${result.details.commonIssues.join(', ')}`);
+  console.log(`  Pages analyzed: ${result.details.pagesAnalyzed.join(", ")}`);
+  console.log(
+    `  Pages needing work: ${result.details.pagesNeedingPreprocessing}/5`,
+  );
+  console.log(`  Common issues: ${result.details.commonIssues.join(", ")}`);
 }
 ```
 
@@ -640,12 +643,14 @@ for (const samplePath of samples) {
 ## Summary
 
 **Key improvements from first-page sampling:**
+
 1. ✅ Sample from **middle 50-70% of book** (actual content)
 2. ✅ Skip first 10% (intro, covers) and last 10% (appendix)
 3. ✅ Distributed sample: 25%, 40%, 50%, 60%, 75% through content
 4. ✅ More representative of actual OCR workload
 
 **Recommendation logic:**
+
 - **Skip**: 0-1 pages need work (excellent/good quality)
 - **Optional**: 2 pages need work (fair quality)
 - **Recommended**: 3+ pages need work (fair/poor quality)

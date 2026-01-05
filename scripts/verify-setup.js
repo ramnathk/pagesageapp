@@ -5,22 +5,22 @@
  * Checks that all required dependencies and configurations are in place
  */
 
-import { execSync } from 'child_process';
-import { existsSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { execSync } from "child_process";
+import { existsSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..');
+const projectRoot = join(__dirname, "..");
 
 // Colors
 const colors = {
-  reset: '\x1b[0m',
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
+  reset: "\x1b[0m",
+  green: "\x1b[32m",
+  red: "\x1b[31m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
 };
 
 const log = {
@@ -33,15 +33,15 @@ const log = {
 let hasErrors = false;
 let hasWarnings = false;
 
-console.log('\n================================================');
-console.log('PageSage Development Environment Verification');
-console.log('================================================\n');
+console.log("\n================================================");
+console.log("PageSage Development Environment Verification");
+console.log("================================================\n");
 
 // 1. Check Node.js version
-log.info('Checking Node.js version...');
+log.info("Checking Node.js version...");
 try {
   const nodeVersion = process.versions.node;
-  const majorVersion = parseInt(nodeVersion.split('.')[0]);
+  const majorVersion = parseInt(nodeVersion.split(".")[0]);
   if (majorVersion >= 18) {
     log.success(`Node.js v${nodeVersion}`);
   } else {
@@ -49,39 +49,41 @@ try {
     hasErrors = true;
   }
 } catch (error) {
-  log.error('Cannot determine Node.js version');
+  log.error("Cannot determine Node.js version");
   hasErrors = true;
 }
 
 // 2. Check npm
-log.info('Checking npm...');
+log.info("Checking npm...");
 try {
-  const npmVersion = execSync('npm --version', { encoding: 'utf8' }).trim();
+  const npmVersion = execSync("npm --version", { encoding: "utf8" }).trim();
   log.success(`npm v${npmVersion}`);
 } catch (error) {
-  log.error('npm not found');
+  log.error("npm not found");
   hasErrors = true;
 }
 
 // 3. Check Homebrew
-log.info('Checking Homebrew...');
+log.info("Checking Homebrew...");
 try {
-  const brewVersion = execSync('brew --version', { encoding: 'utf8' }).split('\n')[0];
+  const brewVersion = execSync("brew --version", { encoding: "utf8" }).split(
+    "\n",
+  )[0];
   log.success(brewVersion);
 } catch (error) {
-  log.warn('Homebrew not found (optional on non-macOS systems)');
+  log.warn("Homebrew not found (optional on non-macOS systems)");
   hasWarnings = true;
 }
 
 // 4. Check key Homebrew packages
-log.info('Checking Homebrew packages...');
-const brewPackages = ['node', 'gh', 'uv'];
+log.info("Checking Homebrew packages...");
+const brewPackages = ["node", "gh", "uv"];
 for (const pkg of brewPackages) {
   try {
-    execSync(`brew list ${pkg}`, { encoding: 'utf8', stdio: 'pipe' });
+    execSync(`brew list ${pkg}`, { encoding: "utf8", stdio: "pipe" });
     log.success(`${pkg} installed`);
   } catch (error) {
-    if (pkg === 'uv') {
+    if (pkg === "uv") {
       log.warn(`${pkg} not installed (needed for Python MCP servers)`);
       hasWarnings = true;
     } else {
@@ -92,9 +94,9 @@ for (const pkg of brewPackages) {
 }
 
 // 5. Check environment variables
-log.info('Checking environment variables...');
-const requiredEnvVars = ['GITHUB_MCP_TOKEN'];
-const optionalEnvVars = ['CODACY_API_TOKEN'];
+log.info("Checking environment variables...");
+const requiredEnvVars = ["GITHUB_MCP_TOKEN"];
+const optionalEnvVars = ["CODACY_API_TOKEN"];
 
 for (const envVar of requiredEnvVars) {
   if (process.env[envVar]) {
@@ -115,22 +117,22 @@ for (const envVar of optionalEnvVars) {
 }
 
 // 6. Check node_modules
-log.info('Checking npm dependencies...');
-if (existsSync(join(projectRoot, 'node_modules'))) {
-  log.success('node_modules directory exists');
+log.info("Checking npm dependencies...");
+if (existsSync(join(projectRoot, "node_modules"))) {
+  log.success("node_modules directory exists");
 } else {
-  log.error('node_modules not found (run: npm install)');
+  log.error("node_modules not found (run: npm install)");
   hasErrors = true;
 }
 
 // 7. Check key files
-log.info('Checking project files...');
+log.info("Checking project files...");
 const requiredFiles = [
-  '.env.example',
-  'Brewfile',
-  'package.json',
-  'docs/development-setup.md',
-  'docs/mcp-configuration.md',
+  ".env.example",
+  "Brewfile",
+  "package.json",
+  "docs/development-setup.md",
+  "docs/mcp-configuration.md",
 ];
 
 for (const file of requiredFiles) {
@@ -143,34 +145,34 @@ for (const file of requiredFiles) {
 }
 
 // 8. Check .env.local
-log.info('Checking .env.local...');
-if (existsSync(join(projectRoot, '.env.local'))) {
-  log.success('.env.local exists');
+log.info("Checking .env.local...");
+if (existsSync(join(projectRoot, ".env.local"))) {
+  log.success(".env.local exists");
 } else {
-  log.warn('.env.local not found (copy from .env.example)');
+  log.warn(".env.local not found (copy from .env.example)");
   hasWarnings = true;
 }
 
 // 9. Check GitHub CLI authentication
-log.info('Checking GitHub CLI authentication...');
+log.info("Checking GitHub CLI authentication...");
 try {
-  execSync('gh auth status', { encoding: 'utf8', stdio: 'pipe' });
-  log.success('GitHub CLI authenticated');
+  execSync("gh auth status", { encoding: "utf8", stdio: "pipe" });
+  log.success("GitHub CLI authenticated");
 } catch (error) {
-  log.warn('GitHub CLI not authenticated (run: gh auth login)');
+  log.warn("GitHub CLI not authenticated (run: gh auth login)");
   hasWarnings = true;
 }
 
 // 10. Check MCP tools
-log.info('Checking MCP tools...');
+log.info("Checking MCP tools...");
 const mcpTools = [
-  { name: 'npx', cmd: 'npx --version', required: true },
-  { name: 'uvx', cmd: 'uvx --version', required: false },
+  { name: "npx", cmd: "npx --version", required: true },
+  { name: "uvx", cmd: "uvx --version", required: false },
 ];
 
 for (const tool of mcpTools) {
   try {
-    execSync(tool.cmd, { encoding: 'utf8', stdio: 'pipe' });
+    execSync(tool.cmd, { encoding: "utf8", stdio: "pipe" });
     log.success(`${tool.name} available`);
   } catch (error) {
     if (tool.required) {
@@ -184,26 +186,26 @@ for (const tool of mcpTools) {
 }
 
 // Summary
-console.log('\n================================================');
-console.log('Verification Summary');
-console.log('================================================\n');
+console.log("\n================================================");
+console.log("Verification Summary");
+console.log("================================================\n");
 
 if (hasErrors) {
-  log.error('Setup verification failed. Please fix the errors above.');
-  console.log('\nFor help, see: docs/development-setup.md\n');
+  log.error("Setup verification failed. Please fix the errors above.");
+  console.log("\nFor help, see: docs/development-setup.md\n");
   process.exit(1);
 } else if (hasWarnings) {
-  log.warn('Setup verification passed with warnings.');
-  console.log('\nSome optional components are missing.');
-  console.log('The project will work, but you may want to install them.');
-  console.log('See: docs/development-setup.md\n');
+  log.warn("Setup verification passed with warnings.");
+  console.log("\nSome optional components are missing.");
+  console.log("The project will work, but you may want to install them.");
+  console.log("See: docs/development-setup.md\n");
   process.exit(0);
 } else {
-  log.success('All checks passed! Your environment is ready.');
-  console.log('\nNext steps:');
-  console.log('  - npm run dev          # Start development server');
-  console.log('  - npm test             # Run tests');
-  console.log('  - npm run check        # Type check');
-  console.log('\n');
+  log.success("All checks passed! Your environment is ready.");
+  console.log("\nNext steps:");
+  console.log("  - npm run dev          # Start development server");
+  console.log("  - npm test             # Run tests");
+  console.log("  - npm run check        # Type check");
+  console.log("\n");
   process.exit(0);
 }

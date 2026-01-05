@@ -77,3 +77,7 @@ desktop.ini
 
 # Cost tracking data (local only)
 /cost-tracking/*.json
+
+# Document AI credentials
+google-documentai-key.json
+.env.documentai
