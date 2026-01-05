@@ -61,7 +61,7 @@ jobs:
       # Optional: Generate SARIF report for review
       - name: Upload CodeQL results as artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: codeql-results
           path: ${{ github.workspace }}/results
